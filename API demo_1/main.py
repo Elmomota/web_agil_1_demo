@@ -30,25 +30,25 @@ def login(correo: str = Form(...), contrasena: str = Form(...)):
     try:
         with mysql.connector.connect(**db_config) as conn:
             with conn.cursor(dictionary=True) as cursor:
-                
-                # Buscar usuario por correo
-                cursor.execute("SELECT id, correo, p_nombre, rol, contrasena FROM usuarios WHERE correo = %s", (correo,))
+
+                # Verificar que exista el correo
+                cursor.execute("SELECT id_usuario, correo, nombre, id_tipo_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
                 usuario = cursor.fetchone()
 
                 if not usuario:
                     raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
                 # Verificar contraseña
-                cursor.execute(
-                    "SELECT id, correo, p_nombre, rol FROM usuarios WHERE correo = %s AND contrasena = SHA2(%s, 256)",
-                    (correo, contrasena)
-                )
+                cursor.execute("""
+                    SELECT id_usuario, correo, nombre, id_tipo_usuario 
+                    FROM usuario 
+                    WHERE correo = %s AND contrasena = SHA2(%s, 256) AND estado = 1
+                """, (correo, contrasena))
                 usuario_validado = cursor.fetchone()
 
                 if not usuario_validado:
                     raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
-                # ✅ Retorno forzado como JSON
                 return JSONResponse(content=usuario_validado)
 
     except Error as e:

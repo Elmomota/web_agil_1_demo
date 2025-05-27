@@ -1,4 +1,3 @@
-# routers/recuperacion.py
 from fastapi import APIRouter, Form, HTTPException
 import mysql.connector
 from datetime import datetime, timedelta
@@ -21,13 +20,14 @@ db_config = {
     'database': 'demo_1'
 }
 
+
 @router.post("/send-recovery-code")
 def send_recovery_code(correo: str = Form(...)):
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
 
-        cursor.execute("SELECT id FROM usuarios WHERE correo = %s", (correo,))
+        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
         usuario = cursor.fetchone()
         if not usuario:
             raise HTTPException(status_code=404, detail="Correo no asociado a ninguna cuenta")
@@ -73,7 +73,6 @@ def send_recovery_code(correo: str = Form(...)):
             conn.close()
 
 
-# ✅ NUEVO ENDPOINT: Verificar código de recuperación
 @router.post("/verify-recovery-code")
 def verificar_codigo(correo: str = Form(...), codigo: str = Form(...)):
     try:
@@ -106,22 +105,22 @@ def verificar_codigo(correo: str = Form(...), codigo: str = Form(...)):
             cursor.close()
         if 'conn' in locals():
             conn.close()
+
+
 @router.post("/reset-password")
 def reset_password(correo: str = Form(...), nueva_contrasena: str = Form(...)):
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
 
-        # Verificar si existe el correo
-        cursor.execute("SELECT id FROM usuarios WHERE correo = %s", (correo,))
+        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Correo no encontrado")
 
-        # Actualizar la contraseña usando SHA2 (puedes cambiar esto si usas otro hash)
         cursor.execute("""
-            UPDATE usuarios 
+            UPDATE usuario 
             SET contrasena = SHA2(%s, 256) 
-            WHERE correo = %s
+            WHERE correo = %s AND estado = 1
         """, (nueva_contrasena, correo))
         conn.commit()
 
