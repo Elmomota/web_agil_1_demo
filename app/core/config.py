@@ -5,11 +5,11 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_HOST: str
     DB_PORT: str
-    DB_SERVICE: str
-    EMAIL_HOST: str
-    EMAIL_PORT: int
-    EMAIL_USER: str
-    EMAIL_PASSWORD: str
+    DB_SCHEMA: str
+    MAIL_HOST: str
+    MAIL_PORT: int
+    MAIL_USER: str
+    MAIL_PASS: str
 
     class Config:
         env_file = ".env"
