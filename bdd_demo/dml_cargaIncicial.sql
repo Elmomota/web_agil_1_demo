@@ -355,3 +355,15 @@ INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (338, 'Torres del Paine
 INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (339, 'Primavera', 16);
 INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (340, 'Timaukel', 16);
 INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (341, 'Cabo de Hornos', 16);
+
+
+
+-- Poblar la tabla tipo_usuario con perfiles del sistema
+INSERT INTO tipo_usuario (id_tipo_usuario, nombre) VALUES
+(1, 'Administrador del Sistema'),
+(2, 'Gestor de Inventario'),
+(3, 'Encargado de Logística'),
+(4, 'Jefe de Producción o Manufactura'),
+(5, 'Auditor de Inventario'),
+(6, 'Gerente de Proyectos'),
+(7, 'Trabajador de Planta');
