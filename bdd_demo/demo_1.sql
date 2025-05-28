@@ -34,6 +34,7 @@ CREATE TABLE estado_proyecto (
     nombre VARCHAR(50) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
 CREATE TABLE estado_orden_compra (
     id_estado INT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
@@ -162,15 +163,14 @@ CREATE TABLE inventario_almacen (
     FOREIGN KEY (id_pieza) REFERENCES pieza(id_pieza)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- HISTORIAL DE PRECIOS
+-- HISTORIAL DE PRECIO / Corregido
 CREATE TABLE historial_precio (
     id_historial INT AUTO_INCREMENT PRIMARY KEY,
     id_pieza INT NOT NULL,
-    id_proveedor INT NOT NULL,
+
     precio INT NOT NULL,
     fecha_compra DATE NOT NULL,
-    FOREIGN KEY (id_pieza) REFERENCES pieza(id_pieza),
-    FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor)
+    FOREIGN KEY (id_pieza) REFERENCES pieza(id_pieza)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- KITS
