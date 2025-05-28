@@ -4,17 +4,18 @@ from app.services.recuperacion import (
     verificar_codigo_recuperacion,
     actualizar_contrasena
 )
+from pydantic import EmailStr
 
 router = APIRouter(prefix="/api/user", tags=["Recuperación de Cuenta"])
 
 @router.post("/send-recovery-code")
-def send_recovery_code(correo: str = Form(...)):
+def send_recovery_code(correo: EmailStr = Form(...)):
     return enviar_codigo_recuperacion(correo)
 
 @router.post("/verify-recovery-code")
-def verify_code(correo: str = Form(...), codigo: str = Form(...)):
+def verify_code(correo: EmailStr = Form(...), codigo: str = Form(...)):
     return verificar_codigo_recuperacion(correo, codigo)
 
 @router.post("/reset-password")
-def reset_password(correo: str = Form(...), nueva_contrasena: str = Form(...)):
+def reset_password(correo: EmailStr = Form(...), nueva_contrasena: str = Form(...)):
     return actualizar_contrasena(correo, nueva_contrasena)

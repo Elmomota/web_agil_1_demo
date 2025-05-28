@@ -1,20 +1,22 @@
 import random
-import os
 import smtplib
 import traceback
 from datetime import datetime, timedelta
 from email.message import EmailMessage
 from fastapi import HTTPException
 from app.db.db_connection import get_connection
+from pydantic import EmailStr
+from app.core.config import settings  # Asegúrate de tener tus settings bien cargados
 
-def enviar_codigo_recuperacion(correo: str):
+
+def enviar_codigo_recuperacion(correo: EmailStr):
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor()
 
         cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
         usuario = cursor.fetchone()
-        if not usuario:
+        if not usuario[0]:
             raise HTTPException(status_code=404, detail="Correo no asociado a ninguna cuenta")
 
         cursor.execute("DELETE FROM codigos_recuperacion WHERE correo = %s", (correo,))
@@ -27,16 +29,18 @@ def enviar_codigo_recuperacion(correo: str):
             (correo, codigo, expiracion)
         )
         conn.commit()
+        cursor.close()
+        conn.close()
 
         msg = EmailMessage()
         msg['Subject'] = 'Código de recuperación'
-        msg['From'] = os.environ.get("MAIL_USER")
+        msg['From'] = settings.MAIL_USER
         msg['To'] = correo
         msg.set_content(f"Tu código de recuperación es: {codigo}. Tienes 5 minutos para ingresarlo.")
 
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        with smtplib.SMTP(settings.MAIL_HOST, settings.MAIL_PORT) as server:
             server.starttls()
-            server.login(os.environ.get("MAIL_USER"), os.environ.get("MAIL_PASS"))
+            server.login(settings.MAIL_USER, settings.MAIL_PASS)
             server.send_message(msg)
 
         return {"message": "Código enviado correctamente"}
@@ -45,11 +49,10 @@ def enviar_codigo_recuperacion(correo: str):
         print("Error general:", traceback.format_exc())
         raise HTTPException(status_code=500, detail="Error al enviar el código")
 
-    finally:
-        cursor.close()
-        conn.close()
+   
+        
 
-def verificar_codigo_recuperacion(correo: str, codigo: str):
+def verificar_codigo_recuperacion(correo: EmailStr, codigo: str):
     try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
@@ -76,12 +79,12 @@ def verificar_codigo_recuperacion(correo: str, codigo: str):
         cursor.close()
         conn.close()
 
-def actualizar_contrasena(correo: str, nueva_contrasena: str):
+def actualizar_contrasena(correo: EmailStr, nueva_contrasena: str):
     try:
         conn = get_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
+        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Correo no encontrado")
 

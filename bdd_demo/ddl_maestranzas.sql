@@ -73,7 +73,10 @@ CREATE TABLE codigos_recuperacion (
 -- USUARIOS Y UBICACIÓN
 CREATE TABLE usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
+    p_nombre VARCHAR(100) NOT NULL,
+    s_nombre VARCHAR(100),
+    a_paterno VARCHAR(100) NOT NULL,
+    a_materno VARCHAR(100),
     correo VARCHAR(100) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL,
     direccion TEXT,
@@ -214,17 +217,7 @@ CREATE TABLE movimiento_inventario (
 
 
 
---INSERT INTO `codigos_recuperacion` (`id`, `correo`, `codigo`, `expiracion`) VALUES
---(7, 'al.barreras@duocuc.cl', '800834', '2025-05-26 00:53:25');
 
--- --------------------------------------------------------
-
---
-
---INSERT INTO `usuarios` (`id_usuario`, `correo`, `contrasena`, `nombre`, `rol`) VALUES
---(1, 'al.barreras@duocuc.cl', 'fdb93b3f8adb19ce54346e91c00bc944e1c7f6fe41ad0d9ab803b72d4a16a703', 'Admin', 1);
-
---
 
 
 
