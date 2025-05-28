@@ -35,11 +35,6 @@ CREATE TABLE estado_proyecto (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE estado_orden_compra (
-    id_estado INT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL UNIQUE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; 
-
 CREATE TABLE tipo_movimiento (
     id_tipo_movimiento INT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
@@ -100,19 +95,6 @@ CREATE TABLE categoria (
     estado BOOLEAN NOT NULL DEFAULT TRUE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- PROVEEDORES  / SE OMITE EN EL CASO
-CREATE TABLE proveedor (
-    id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    contacto VARCHAR(100) NOT NULL,
-    telefono VARCHAR(20),
-    correo VARCHAR(100),
-    direccion TEXT,
-    id_comuna INT NOT NULL,
-    condiciones_pago TEXT,
-    estado BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (id_comuna) REFERENCES comuna(id_comuna)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- PROYECTOS
 CREATE TABLE proyecto (
@@ -138,10 +120,20 @@ CREATE TABLE usuario_proyecto (
     FOREIGN KEY (id_rol_proyecto) REFERENCES tipo_rol_proyecto(id_rol_proyecto)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE marca (
+    id_marca INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    descripcion TEXT,
+    estado BOOLEAN NOT NULL DEFAULT TRUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
 -- PIEZAS
 CREATE TABLE pieza (
     id_pieza INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
+    id_marca INT NOT NULL,
     descripcion TEXT,
     numero_serie VARCHAR(100),
 	imagen_referencial LONGBLOB,
@@ -150,7 +142,8 @@ CREATE TABLE pieza (
     fecha_vencimiento DATE,
     alerta_vencimiento BOOLEAN NOT NULL DEFAULT FALSE,
     estado BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria),
+    FOREIGN KEY (id_marca) REFERENCES marca(id_marca)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- INVENTARIO EN ALMACÉN (relación N:N pieza-almacén)
@@ -167,7 +160,6 @@ CREATE TABLE inventario_almacen (
 CREATE TABLE historial_precio (
     id_historial INT AUTO_INCREMENT PRIMARY KEY,
     id_pieza INT NOT NULL,
-
     precio INT NOT NULL,
     fecha_compra DATE NOT NULL,
     FOREIGN KEY (id_pieza) REFERENCES pieza(id_pieza)
@@ -219,33 +211,6 @@ CREATE TABLE movimiento_inventario (
     FOREIGN KEY (id_proyecto) REFERENCES proyecto(id_proyecto),
     FOREIGN KEY (id_almacen) REFERENCES almacen(id_almacen)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-
-
-
--- ÓRDENES DE COMPRA / SE OMITE PORQUE SE RELACIONA CON LA LOGICA DE PROVEEDORES
-CREATE TABLE orden_compra (
-    id_orden INT AUTO_INCREMENT PRIMARY KEY,
-    id_proveedor INT NOT NULL,
-    fecha DATE NOT NULL,
-    id_estado INT NOT NULL,
-    total INT NOT NULL,
-    FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor),
-    FOREIGN KEY (id_estado) REFERENCES estado_orden_compra(id_estado)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE detalle_orden_compra (
-    id_detalle INT NOT NULL,
-    id_orden INT NOT NULL,
-    id_pieza INT NOT NULL,
-    cantidad INT NOT NULL,
-    precio_unitario INT NOT NULL,
-    PRIMARY KEY (id_detalle, id_orden),
-    FOREIGN KEY (id_orden) REFERENCES orden_compra(id_orden),
-    FOREIGN KEY (id_pieza) REFERENCES pieza(id_pieza)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 
 
