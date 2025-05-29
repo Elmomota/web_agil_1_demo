@@ -391,5 +391,6 @@ INSERT INTO categoria (id_categoria, nombre, descripcion, estado) VALUES
 (6, 'Sin Categoría', 'Categoría por defecto para piezas no clasificadas', TRUE);
 
 
-INSERT INTO `usuario (id_usuario,p_nombre,s_nombre,a_paterno,a_materno,correo,contrasena,direccion,id_comuna,id_tipo_usuario,id_almacen,estado) VALUES
-	 (1,'Vicente',NULL,'Rivera','Alvarez','vice.riveraa@duocuc.cl','12345','Manqueque 389',330,1,NULL,1);
+INSERT INTO usuario (id_usuario,p_nombre,s_nombre,a_paterno,a_materno,correo,contrasena,direccion,id_comuna,id_tipo_usuario,id_almacen,estado) VALUES
+	 (1,'Vicente',NULL,'Rivera','Alvarez','vice.riveraa@duocuc.cl','15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225','Manqueque 389',330,1,NULL,1),
+	 (2,'Alvaro','Israel','Barrera',NULL,'churrasquito.psn@gmail.com','12345','No tengo casa 32389',170,2,4,1);
