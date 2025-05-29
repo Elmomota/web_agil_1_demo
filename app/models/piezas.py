@@ -18,6 +18,8 @@ class PiezaCreate(PiezaBase):
     id_marca: int
     stock_minimo: int
     id_categoria: int
+    id_almacen: int  # NUEVO
+    cantidad: Optional[int] = 0  # NUEVO
 
 class PiezaUpdate(PiezaBase):
     pass # todos los campos opcionales
@@ -25,11 +27,14 @@ class PiezaUpdate(PiezaBase):
 class PiezaOut(BaseModel):
     id_pieza: int
     nombre: str
+    id_marca: int
     marca: str
+    id_categoria: int
+    categoria: str
     descripcion: Optional[str]
     numero_serie: Optional[str]
+    imagen_referencial: Optional[bytes]
     stock_minimo: int
-    categoria: str
     fecha_vencimiento: Optional[str]
     alerta_vencimiento: bool
     estado: bool
@@ -65,9 +70,15 @@ class KitPiezaBase(BaseModel):
 class KitPiezaUpdate(BaseModel):
     cantidad: int
 
+
+class KitPiezaCreate(BaseModel):
+    id_kit: int
+    id_pieza: int
+    cantidad: int
+
 class KitPiezaOut(BaseModel):
     id_kit: int
     id_pieza: int
     cantidad: int
     nombre_pieza: str
-    descripcion_pieza: Optional[str]
+    descripcion_pieza: Optional[str] = ''
