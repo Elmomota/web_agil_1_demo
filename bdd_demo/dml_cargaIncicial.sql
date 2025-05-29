@@ -367,3 +367,7 @@ INSERT INTO tipo_usuario (id_tipo_usuario, nombre) VALUES
 (5, 'Auditor de Inventario'),
 (6, 'Gerente de Proyectos'),
 (7, 'Trabajador de Planta');
+
+
+INSERT INTO `usuario (id_usuario,p_nombre,s_nombre,a_paterno,a_materno,correo,contrasena,direccion,id_comuna,id_tipo_usuario,id_almacen,estado) VALUES
+	 (1,'Vicente',NULL,'Rivera','Alvarez','vice.riveraa@duocuc.cl','12345','Manqueque 389',330,1,NULL,1);
