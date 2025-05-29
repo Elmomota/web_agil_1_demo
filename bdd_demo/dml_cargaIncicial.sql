@@ -368,6 +368,28 @@ INSERT INTO tipo_usuario (id_tipo_usuario, nombre) VALUES
 (6, 'Gerente de Proyectos'),
 (7, 'Trabajador de Planta');
 
+INSERT INTO almacen (id_almacen, nombre, direccion, id_comuna, estado) VALUES
+(1, 'Almacén de Herramientas Eléctricas', 'Av. Talleres 1234', 101, TRUE),
+(2, 'Almacén de Componentes Mecánicos', 'Calle Maestranza 5678', 102, TRUE),
+(3, 'Almacén de Seguridad Industrial', 'Ruta Industrial 9012', 103, TRUE),
+(4, 'Almacén de Fijaciones y Tornillería', 'Pasaje Estructural 3456', 104, TRUE),
+(5, 'Almacén de Materiales Generales', 'Bodega Central 7890', 105, TRUE);
+
+INSERT INTO marca (id_marca, nombre, descripcion, estado) VALUES
+(1, 'Bosch', 'Fabricante alemán especializado en herramientas y componentes eléctricos', TRUE),
+(2, 'Makita', 'Marca japonesa reconocida por sus herramientas de precisión y durabilidad', TRUE),
+(3, 'Stanley', 'Empresa global dedicada a herramientas manuales y soluciones industriales', TRUE),
+(4, '3M', 'Multinacional enfocada en productos de seguridad y adhesivos industriales', TRUE),
+(5, 'SKF', 'Especialistas en rodamientos y componentes mecánicos', TRUE);
+
+INSERT INTO categoria (id_categoria, nombre, descripcion, estado) VALUES
+(1, 'Herramientas Eléctricas', 'Piezas y componentes de herramientas que requieren energía eléctrica', TRUE),
+(2, 'Componentes Mecánicos', 'Rodamientos, ejes, piezas estructurales y de transmisión', TRUE),
+(3, 'Elementos de Seguridad', 'Equipos de protección personal y sistemas de seguridad industrial', TRUE),
+(4, 'Sistemas de Fijación', 'Tornillos, pernos, tuercas, anclajes y similares', TRUE),
+(5, 'Materiales Consumibles', 'Productos de uso frecuente como cintas, adhesivos y sellantes', TRUE),
+(6, 'Sin Categoría', 'Categoría por defecto para piezas no clasificadas', TRUE);
+
 
 INSERT INTO `usuario (id_usuario,p_nombre,s_nombre,a_paterno,a_materno,correo,contrasena,direccion,id_comuna,id_tipo_usuario,id_almacen,estado) VALUES
 	 (1,'Vicente',NULL,'Rivera','Alvarez','vice.riveraa@duocuc.cl','12345','Manqueque 389',330,1,NULL,1);
