@@ -17,7 +17,7 @@ def enviar_codigo_recuperacion(correo: EmailStr):
         cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
         usuario = cursor.fetchone()
         if not usuario[0]:
-            raise HTTPException(status_code=404, detail="Correo no asociado a ninguna cuenta")
+            raise HTTPException(status_code=404, detail="Correo no asociado a ninguna cuenta o correo eliminado por Administracion")
 
         cursor.execute("DELETE FROM codigos_recuperacion WHERE correo = %s", (correo,))
 
@@ -55,36 +55,36 @@ def enviar_codigo_recuperacion(correo: EmailStr):
 def verificar_codigo_recuperacion(correo: EmailStr, codigo: str):
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor()
 
         cursor.execute("""
             SELECT * FROM codigos_recuperacion 
             WHERE correo = %s AND codigo = %s 
             ORDER BY id DESC LIMIT 1
-        """, (correo, codigo))
+        """, (correo, codigo,))
 
         registro = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if datetime.now() > registro[3]: #la cuarta columna del registro es la de la expiracion
+            raise HTTPException(status_code=410, detail="El código ha expirado")
+        
         if not registro:
             raise HTTPException(status_code=400, detail="Código inválido")
-        if datetime.now() > registro["expiracion"]:
-            raise HTTPException(status_code=410, detail="El código ha expirado")
-
         return {"message": "Código válido"}
     
     except Exception as e:
         print("Error en verificación:", traceback.format_exc())
         raise HTTPException(status_code=500, detail="Error al verificar el código")
 
-    finally:
-        cursor.close()
-        conn.close()
+        
 
 def actualizar_contrasena(correo: EmailStr, nueva_contrasena: str):
     try:
         conn = get_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo))
+        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Correo no encontrado")
 

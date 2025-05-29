@@ -15,10 +15,10 @@ def login_usuario(correo: str, contrasena: str):
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         cursor.execute("""
-            SELECT id_usuario, correo, nombre, id_tipo_usuario 
+            SELECT id_usuario,id_tipo_usuario 
             FROM usuario 
             WHERE correo = %s AND contrasena = SHA2(%s, 256) AND estado = 1
-        """, (correo, contrasena))
+        """, (correo, contrasena,))
         usuario_validado = cursor.fetchone()
 
         if not usuario_validado:
