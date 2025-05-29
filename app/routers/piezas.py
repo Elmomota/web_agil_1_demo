@@ -1,3 +1,4 @@
+#C:\Vicente\GitHub\web_agil_1_demo\app\routers\piezas.py
 from fastapi import APIRouter, HTTPException
 from app.models.piezas import *
 from app.services import piezas
@@ -58,8 +59,8 @@ def agregar_kit_pieza(data: KitPiezaCreate):
     return {"message": "Pieza agregada al kit correctamente"}
 
 @router.put("/kit_piezas")
-def actualizar_kit_pieza(data: KitPiezaUpdate):
-    piezas.actualizar_kit_pieza(data.id_kit, data.id_pieza, data)
+def actualizar_kit_pieza(data: KitPiezaUpdateFull):
+    piezas.actualizar_kit_pieza(data.id_kit, data.id_pieza, data.cantidad)
     return {"message": "Cantidad actualizada correctamente"}
 
 @router.delete("/kit_piezas")

@@ -1,28 +1,29 @@
 from pydantic import BaseModel
 from typing import Optional
 
-
-#MODELOES DE LA TABLA PIEZA
+# MODELOS DE LA TABLA PIEZA
 class PiezaBase(BaseModel):
     nombre: Optional[str]
     id_marca: Optional[int]
     descripcion: Optional[str]
     numero_serie: Optional[str]
-    imagen_referencial: Optional[bytes]
+    imagen: Optional[str] = None  # Base64 desde el front
     stock_minimo: Optional[int]
     id_categoria: Optional[int]
-    fecha_vencimiento: Optional[str] # formato YYYY-MM-DD
+    fecha_vencimiento: Optional[str]  # formato YYYY-MM-DD
 
 class PiezaCreate(PiezaBase):
     nombre: str
     id_marca: int
     stock_minimo: int
     id_categoria: int
-    id_almacen: int  # NUEVO
-    cantidad: Optional[int] = 0  # NUEVO
+    id_almacen: int
+    cantidad: Optional[int] = 0
 
 class PiezaUpdate(PiezaBase):
-    pass # todos los campos opcionales
+    id_almacen: Optional[int] = None
+
+
 
 class PiezaOut(BaseModel):
     id_pieza: int
@@ -33,11 +34,12 @@ class PiezaOut(BaseModel):
     categoria: str
     descripcion: Optional[str]
     numero_serie: Optional[str]
-    imagen_referencial: Optional[bytes]
+    imagenOut: Optional[str] = None  # base64 para respuesta
     stock_minimo: int
     fecha_vencimiento: Optional[str]
     alerta_vencimiento: bool
     estado: bool
+
 
 
 #MODELOS DE LA TABLA KIT
@@ -53,6 +55,7 @@ class KitCreate(BaseModel):
 class KitUpdate(KitBase):
     pass
 
+
 class KitOut(BaseModel):
     id_kit: int
     nombre: str
@@ -67,9 +70,11 @@ class KitPiezaBase(BaseModel):
     id_pieza: int
     cantidad: int
 
-class KitPiezaUpdate(BaseModel):
-    cantidad: int
 
+class KitPiezaUpdateFull(BaseModel):
+    id_kit: int
+    id_pieza: int
+    cantidad: int
 
 class KitPiezaCreate(BaseModel):
     id_kit: int
