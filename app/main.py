@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import recuperacion
 from app.routers import usuario
+from app.routers import piezas
+
 import multiprocessing
 
 app = FastAPI()
@@ -18,6 +20,8 @@ app.add_middleware(
 # Routers
 app.include_router(recuperacion.router)
 app.include_router(usuario.router)
+app.include_router(piezas.router, prefix= "/api")
+
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()  # Importante para Windows y PyInstaller

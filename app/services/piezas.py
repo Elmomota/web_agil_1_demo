@@ -49,9 +49,9 @@ def crear_pieza(data: PiezaCreate):
     conn = get_connection()
     cursor = conn.cursor()
     imagen_bytes = None
-    if data.imagen_referencial:
+    if data.imagen:
         try:
-            imagen_bytes = base64.b64decode(data.imagen_referencial)
+            imagen_bytes = base64.b64decode(data.imagen)
         except Exception as e:
             print("Error al decodificar imagen base64:", e)
 
