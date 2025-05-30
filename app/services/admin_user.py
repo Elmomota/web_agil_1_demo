@@ -1,0 +1,142 @@
+from fastapi import HTTPException
+from app.db.db_connection import get_connection
+from app.models.usuario import UsuarioCreate
+from app.models.usuario import UsuarioEdit
+from app.models.usuario import Usuario
+from app.utils.email import enviar_correo
+
+def crear_usuario(usuario: UsuarioCreate):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # Validar si ya existe el correo
+        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s", (usuario.correo,))
+        if cursor.fetchone():
+            raise HTTPException(status_code=400, detail="Correo ya registrado")
+
+        # Insertar usuario
+        cursor.execute("""
+            INSERT INTO usuario (p_nombre, s_nombre, a_paterno, a_materno, correo, contrasena, direccion, id_comuna, id_tipo_usuario, id_almacen)
+            VALUES (%s, '', '', '', %s, SHA2(%s, 256), %s, %s, %s, %s)
+        """, (
+            usuario.nombre,
+            usuario.correo,
+            usuario.contrasena,
+            usuario.direccion,
+            usuario.id_comuna,
+            usuario.id_tipo_usuario,
+            usuario.id_almacen
+        ))
+        conn.commit()
+
+        # Enviar correo con credenciales
+        cuerpo = (
+            f"Bienvenido a Maestranzas Unidos.\n\n"
+            f"Tu cuenta ha sido creada exitosamente.\n\n"
+            f"Correo: {usuario.correo}\n"
+            f"Contraseña: {usuario.contrasena}\n\n"
+            f"Por favor, cambia tu contraseña después de iniciar sesión."
+        )
+
+        enviar_correo(usuario.correo, "Credenciales de acceso", cuerpo)
+
+        return {"message": "Usuario creado y correo enviado correctamente"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        print("Error general al crear usuario:", e)
+        raise HTTPException(status_code=500, detail="Error al crear usuario")
+    finally:
+        cursor.close()
+        conn.close()
+
+def editar_usuario(usuario: UsuarioEdit):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id_usuario FROM usuario WHERE id_usuario = %s", (usuario.id_usuario,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        cursor.execute("""
+            UPDATE usuario
+            SET p_nombre = %s,
+                correo = %s,
+                direccion = %s,
+                id_comuna = %s,
+                id_tipo_usuario = %s,
+                id_almacen = %s,
+                estado = %s
+            WHERE id_usuario = %s
+        """, (
+            usuario.nombre,
+            usuario.correo,
+            usuario.direccion,
+            usuario.id_comuna,
+            usuario.id_tipo_usuario,
+            usuario.id_almacen,
+            usuario.estado,
+            usuario.id_usuario
+        ))
+        conn.commit()
+
+        return {"message": "Usuario actualizado correctamente"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error al editar usuario")
+
+    finally:
+        cursor.close()
+        conn.close()
+
+def eliminar_usuario(id_usuario: int):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id_usuario FROM usuario WHERE id_usuario = %s AND estado = 1", (id_usuario,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Usuario no encontrado o ya está inactivo")
+
+        cursor.execute("UPDATE usuario SET estado = 0 WHERE id_usuario = %s", (id_usuario,))
+        conn.commit()
+
+        return {"message": "Usuario desactivado correctamente"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error al eliminar usuario")
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+
+def listar_usuarios_service() -> list[Usuario]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id_usuario, p_nombre, correo, direccion, id_comuna, id_tipo_usuario, id_almacen, estado
+        FROM usuario
+        WHERE estado = TRUE
+    """)
+    rows = cursor.fetchall()
+
+    usuarios = [
+        Usuario(
+            id_usuario=row[0],
+            nombre=row[1],
+            correo=row[2],
+            direccion=row[3],
+            id_comuna=row[4],
+            id_tipo_usuario=row[5],
+            id_almacen=row[6],
+            estado=bool(row[7])
+        )
+        for row in rows
+    ]
+
+    return usuarios

@@ -7,6 +7,12 @@ from fastapi import HTTPException
 from app.db.db_connection import get_connection
 from pydantic import EmailStr
 from app.core.config import settings  # Asegúrate de tener tus settings bien cargados
+from app.utils.email import enviar_correo
+
+
+
+
+
 
 
 def enviar_codigo_recuperacion(correo: EmailStr):
@@ -16,8 +22,8 @@ def enviar_codigo_recuperacion(correo: EmailStr):
 
         cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
         usuario = cursor.fetchone()
-        if not usuario[0]:
-            raise HTTPException(status_code=404, detail="Correo no asociado a ninguna cuenta o correo eliminado por Administracion")
+        if not usuario:
+            raise HTTPException(status_code=404, detail="Correo no asociado o eliminado")
 
         cursor.execute("DELETE FROM codigos_recuperacion WHERE correo = %s", (correo,))
 
@@ -32,20 +38,13 @@ def enviar_codigo_recuperacion(correo: EmailStr):
         cursor.close()
         conn.close()
 
-        msg = EmailMessage()
-        msg['Subject'] = 'Código de recuperación'
-        msg['From'] = settings.MAIL_USER
-        msg['To'] = correo
-        msg.set_content(f"Tu código de recuperación es: {codigo}. Tienes 5 minutos para ingresarlo.")
-
-        with smtplib.SMTP(settings.MAIL_HOST, settings.MAIL_PORT) as server:
-            server.starttls()
-            server.login(settings.MAIL_USER, settings.MAIL_PASS)
-            server.send_message(msg)
+        # Llamada al utilitario de email
+        cuerpo = f"Tu código de recuperación es: {codigo}. Tienes 5 minutos para ingresarlo."
+        enviar_correo(correo, "Código de recuperación", cuerpo)
 
         return {"message": "Código enviado correctamente"}
-    
-    except Exception as e:
+
+    except Exception:
         print("Error general:", traceback.format_exc())
         raise HTTPException(status_code=500, detail="Error al enviar el código")
 

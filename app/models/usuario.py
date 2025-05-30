@@ -21,3 +21,14 @@ class UsuarioCreate(BaseModel):
     id_comuna: int
     id_tipo_usuario: int
     id_almacen: Optional[int]
+
+# Este modelo se usa para editar un usuario existente
+class UsuarioEdit(BaseModel):
+    id_usuario: int
+    nombre: str
+    correo: str
+    direccion: Optional[str]
+    id_comuna: int
+    id_tipo_usuario: int
+    id_almacen: Optional[int]
+    estado: bool
