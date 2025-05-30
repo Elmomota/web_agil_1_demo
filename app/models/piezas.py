@@ -1,6 +1,9 @@
 #app\models\piezas.py
 from pydantic import BaseModel
 from typing import Optional
+from datetime import date
+
+
 
 # MODELOS DE LA TABLA PIEZA
 class PiezaBase(BaseModel):
@@ -46,7 +49,7 @@ class PiezaOut(BaseModel):
     numero_serie: Optional[str]
     imagenOut: Optional[str] = None  # base64 para respuesta
     stock_minimo: int
-    fecha_vencimiento: Optional[str]
+    fecha_vencimiento: Optional[date]
     alerta_vencimiento: bool
     estado: bool
 
