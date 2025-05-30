@@ -20,6 +20,7 @@ def notificar_gestores_pieza(correo: str, nombre: str, nombre_pieza: str):
     Sistema de Inventarios - Maestranzas Unidos S.A.
     """)
 
+
     with smtplib.SMTP(settings.MAIL_HOST, settings.MAIL_PORT) as server:
         server.starttls()
         server.login(settings.MAIL_USER, settings.MAIL_PASS)
