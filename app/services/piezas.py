@@ -265,17 +265,26 @@ def eliminar_kit(id_kit: int):
 def listar_kit_piezas(id_kit: int):
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
-    query = '''
+
+
+        # Validar estado de kit
+    cursor.execute("SELECT estado FROM kit WHERE id_kit = %s", (id_kit,))
+    kit = cursor.fetchone()
+    if not kit:
+        raise HTTPException(status_code=404, detail="Kit no encontrado")
+    if not kit["estado"]:  # ✅ acceso por clave en dict
+        raise HTTPException(status_code=400, detail="Kit inactivo")
+    
+    cursor.execute('''
         SELECT kp.*, p.nombre AS nombre_pieza, COALESCE(p.descripcion, '') AS descripcion_pieza
         FROM kit_pieza kp
         JOIN pieza p ON kp.id_pieza = p.id_pieza
         WHERE kp.id_kit = %s
-    '''
-    cursor.execute(query, (id_kit,))
-    detalles = cursor.fetchall()
+    ''', (id_kit,))
+    rows = cursor.fetchall()
     cursor.close()
     conn.close()
-    return detalles
+    return rows
 
 def agregar_kit_pieza(id_kit: int, id_pieza: int, cantidad: int):
 
@@ -292,6 +301,14 @@ def agregar_kit_pieza(id_kit: int, id_pieza: int, cantidad: int):
         raise HTTPException(status_code=404, detail="Kit no encontrado")
     if not kit[0]:
         raise HTTPException(status_code=400, detail="Kit inactivo")
+
+# Verificar si ya existe la combinación (id_kit, id_pieza)
+    cursor.execute("SELECT 1 FROM kit_pieza WHERE id_kit = %s AND id_pieza = %s", (id_kit, id_pieza))
+    if cursor.fetchone():
+        raise HTTPException(
+            status_code=400,
+            detail="Esta pieza ya está asociada al kit. Si desea cambiar la cantidad, edítela desde la vista correspondiente."
+        )
         
 
     cursor.execute("INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES (%s, %s, %s)",
@@ -320,6 +337,12 @@ def actualizar_kit_pieza(id_kit: int, id_pieza: int, cantidad: int):
         raise HTTPException(status_code=404, detail="Pieza no encontrada")
     if not pieza[0]:
         raise HTTPException(status_code=400, detail="Pieza inactiva")
+
+    # Validar que la pieza realmente esté en el kit
+    cursor.execute("SELECT 1 FROM kit_pieza WHERE id_kit = %s AND id_pieza = %s", (id_kit, id_pieza))
+    existe = cursor.fetchone()
+    if not existe:
+        raise HTTPException(status_code=404, detail="La pieza no pertenece al kit")
     
     cursor.execute("UPDATE kit_pieza SET cantidad = %s WHERE id_kit = %s AND id_pieza = %s",
                    (cantidad, id_kit, id_pieza))
@@ -347,6 +370,13 @@ def eliminar_kit_pieza(id_kit: int, id_pieza: int):
         raise HTTPException(status_code=404, detail="Pieza no encontrada")
     if not pieza[0]:
         raise HTTPException(status_code=400, detail="Pieza inactiva")
+    
+    # Validar que la pieza realmente esté en el kit
+    cursor.execute("SELECT 1 FROM kit_pieza WHERE id_kit = %s AND id_pieza = %s", (id_kit, id_pieza))
+    existe = cursor.fetchone()
+    if not existe:
+        raise HTTPException(status_code=404, detail="La pieza no pertenece al kit")
+    
     cursor.execute("DELETE FROM kit_pieza WHERE id_kit = %s AND id_pieza = %s", (id_kit, id_pieza))
     conn.commit()
     cursor.close()
