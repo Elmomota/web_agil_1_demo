@@ -102,30 +102,43 @@ def actualizar_pieza(id_pieza: int, data: PiezaUpdate):
         # 2. Obtener almacén actual
     cursor.execute("SELECT id_almacen FROM inventario_almacen WHERE id_pieza = %s", (id_pieza,))
     almacen_actual = cursor.fetchone()
-    id_almacen_actual = almacen_actual["id_almacen"] if almacen_actual else None
+    id_almacen_actual = almacen_actual[0] if almacen_actual else None
+
+    # 3. Extraer valores del dict
+    data_dict = data.dict(exclude_unset=True)
+    id_almacen_nuevo = data_dict.get("id_almacen")
+    nueva_cantidad = data_dict.get("cantidad", 0)
+
+    # 4. Eliminar id_almacen y cantidad del dict para no actualizar en tabla pieza
+    data_dict.pop("id_almacen", None)
+    data_dict.pop("cantidad", None)
+
+
 
     campos = []
     valores = []
-    for key, value in data.dict(exclude_unset=True).items():
-        campos.append(f"{key} = %s")
-        valores.append(value)
+    for key, value in data_dict.items():
+        if key != "imagen_referencial":
+            campos.append(f"{key} = %s")
+            valores.append(value)
 
-        # 3. Imagen: decodificar si viene
-    data_dict = data.dict(exclude_unset=True)
+        # 5. Imagen: decodificar si viene
     if "imagen_referencial" in data_dict:
-        try:
-            imagen_blob = base64.b64decode(data_dict["imagen_referencial"])
+        if data_dict["imagen_referencial"] is not None:
+            try:
+                imagen_blob = base64.b64decode(data_dict["imagen_referencial"])
+                campos.append("imagen_referencial = %s")
+                valores.append(imagen_blob)
+            except Exception:
+                raise HTTPException(status_code=400, detail="Imagen inválida")
+        else:
             campos.append("imagen_referencial = %s")
-            valores.append(imagen_blob)
-        except Exception:
-            raise HTTPException(status_code=400, detail="Imagen inválida")
+            valores.append(None)
             
-    # 4. Validar y setear alerta vencimiento
+    # 6. Validar y setear alerta vencimiento
     if "fecha_vencimiento" in data_dict:
         campos.append("alerta_vencimiento = IF(%s IS NOT NULL AND %s < CURDATE(), TRUE, FALSE)")
         valores.extend([data_dict["fecha_vencimiento"], data_dict["fecha_vencimiento"]])
-
-    
 
     if not campos:
         raise HTTPException(status_code=400, detail="No hay campos para actualizar")
@@ -134,36 +147,41 @@ def actualizar_pieza(id_pieza: int, data: PiezaUpdate):
     valores.append(id_pieza)
     cursor.execute(query, valores)
 
-    # 7. Si se quiere cambiar de almacén:
-    id_almacen_nuevo = data_dict.get("id_almacen")
-    nueva_cantidad = data_dict.get("cantidad", 0)
-    # Validar que el nuevo id_almacen existe y esté activo
+    # 8. Si se quiere cambiar de almacén
     if id_almacen_nuevo and id_almacen_nuevo != id_almacen_actual:
         cursor.execute("SELECT estado FROM almacen WHERE id_almacen = %s", (id_almacen_nuevo,))
         almacen = cursor.fetchone()
+
         if not almacen:
             raise HTTPException(status_code=404, detail="El nuevo almacén no existe")
         if not almacen[0]:
             raise HTTPException(status_code=400, detail="El nuevo almacén está inactivo")
 
-        # Eliminar vínculo anterior
-        cursor.execute("DELETE FROM inventario_almacen WHERE id_pieza = %s", (id_pieza,))
-        # Insertar nuevo vínculo
-        cursor.execute('''
-            INSERT INTO inventario_almacen (id_almacen, id_pieza, cantidad)
-            VALUES (%s, %s, %s)
-        ''', (id_almacen_nuevo, id_pieza, nueva_cantidad))
+        # Verificar si ya existe el vínculo
+        cursor.execute("SELECT 1 FROM inventario_almacen WHERE id_pieza = %s", (id_pieza,))
+        if cursor.fetchone():
+            # Actualizar si existe
+            cursor.execute('''
+                UPDATE inventario_almacen
+                SET id_almacen = %s, cantidad = %s
+                WHERE id_pieza = %s
+            ''', (id_almacen_nuevo, nueva_cantidad, id_pieza))
+        else:
+            # Insertar si no existía
+            cursor.execute('''
+                INSERT INTO inventario_almacen (id_almacen, id_pieza, cantidad)
+                VALUES (%s, %s, %s)
+            ''', (id_almacen_nuevo, id_pieza, nueva_cantidad))
 
-        # Notificar a nuevos gestores
+        # Notificar a nuevos gestores del nuevo almacén
         cursor.execute('''
             SELECT correo, p_nombre FROM usuario
             WHERE id_almacen = %s AND id_tipo_usuario = 2 AND estado = TRUE
         ''', (id_almacen_nuevo,))
         gestores = cursor.fetchall()
-        nombre_pieza = data_dict.get("nombre", "una pieza actualizada")
+        for correo, nombre in gestores:
+            notificar_gestores_pieza(correo, nombre, data.nombre)
 
-        for gestor in gestores:
-            notificar_gestores_pieza(gestor["correo"], gestor["p_nombre"], nombre_pieza)
     conn.commit()
     cursor.close()
     conn.close()

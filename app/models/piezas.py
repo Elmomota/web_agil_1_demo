@@ -1,3 +1,4 @@
+#app\models\piezas.py
 from pydantic import BaseModel
 from typing import Optional
 
@@ -20,9 +21,18 @@ class PiezaCreate(PiezaBase):
     id_almacen: int
     cantidad: Optional[int] = 0
 
-class PiezaUpdate(PiezaBase):
-    id_almacen: Optional[int] = None
 
+class PiezaUpdate(BaseModel):
+    nombre: Optional[str]
+    id_marca: Optional[int]
+    descripcion: Optional[str]
+    numero_serie: Optional[str]
+    imagen_referencial: Optional[str]  # <--- debe llamarse así
+    stock_minimo: Optional[int]
+    id_categoria: Optional[int]
+    fecha_vencimiento: Optional[str]
+    id_almacen: Optional[int]
+    cantidad: Optional[int]
 
 
 class PiezaOut(BaseModel):
