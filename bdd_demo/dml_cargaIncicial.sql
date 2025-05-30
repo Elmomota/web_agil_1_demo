@@ -367,3 +367,231 @@ INSERT INTO tipo_usuario (id_tipo_usuario, nombre) VALUES
 (5, 'Auditor de Inventario'),
 (6, 'Gerente de Proyectos'),
 (7, 'Trabajador de Planta');
+
+INSERT INTO almacen (id_almacen, nombre, direccion, id_comuna, estado) VALUES
+(1, 'Almacén de Herramientas Eléctricas', 'Av. Talleres 1234', 101, TRUE),
+(2, 'Almacén de Componentes Mecánicos', 'Calle Maestranza 5678', 102, TRUE),
+(3, 'Almacén de Seguridad Industrial', 'Ruta Industrial 9012', 103, TRUE),
+(4, 'Almacén de Fijaciones y Tornillería', 'Pasaje Estructural 3456', 104, TRUE),
+(5, 'Almacén de Materiales Generales', 'Bodega Central 7890', 105, TRUE);
+
+INSERT INTO marca (id_marca, nombre, descripcion, estado) VALUES
+(1, 'Bosch', 'Fabricante alemán especializado en herramientas y componentes eléctricos', TRUE),
+(2, 'Makita', 'Marca japonesa reconocida por sus herramientas de precisión y durabilidad', TRUE),
+(3, 'Stanley', 'Empresa global dedicada a herramientas manuales y soluciones industriales', TRUE),
+(4, '3M', 'Multinacional enfocada en productos de seguridad y adhesivos industriales', TRUE),
+(5, 'SKF', 'Especialistas en rodamientos y componentes mecánicos', TRUE);
+
+INSERT INTO categoria (id_categoria, nombre, descripcion, estado) VALUES
+(1, 'Herramientas Eléctricas', 'Piezas y componentes de herramientas que requieren energía eléctrica', TRUE),
+(2, 'Componentes Mecánicos', 'Rodamientos, ejes, piezas estructurales y de transmisión', TRUE),
+(3, 'Elementos de Seguridad', 'Equipos de protección personal y sistemas de seguridad industrial', TRUE),
+(4, 'Sistemas de Fijación', 'Tornillos, pernos, tuercas, anclajes y similares', TRUE),
+(5, 'Materiales Consumibles', 'Productos de uso frecuente como cintas, adhesivos y sellantes', TRUE),
+(6, 'Sin Categoría', 'Categoría por defecto para piezas no clasificadas', TRUE);
+
+INSERT INTO pieza (id_pieza, nombre, id_marca, descripcion, numero_serie, stock_minimo, id_categoria, fecha_vencimiento, alerta_vencimiento, estado)
+VALUES
+(1, 'Taladro Percutor 500W', 1, 'Taladro de impacto para perforación en hormigón y metal', 'BOS-TAL-500', 5, 1, NULL, FALSE, TRUE),
+(2, 'Sierra Circular 185mm', 2, 'Sierra para cortes longitudinales y transversales en madera', 'MAK-SC-185', 4, 1, NULL, FALSE, TRUE),
+(3, 'Amoladora Angular 115mm', 1, 'Herramienta para corte y desbaste de metales', 'BOS-AM-115', 6, 1, NULL, FALSE, TRUE),
+(4, 'Atornillador Eléctrico 12V', 3, 'Atornillador inalámbrico para ensamblajes rápidos', 'STA-ATE-12', 4, 1, NULL, FALSE, TRUE),
+(5, 'Multímetro Digital', 3, 'Instrumento de medición de voltaje, corriente y resistencia', 'STA-MUL-01', 3, 1, NULL, FALSE, TRUE),
+(6, 'Pulidora de Auto 1300W', 2, 'Pulidora para acabados en superficies metálicas', 'MAK-PUL-13', 5, 1, NULL, FALSE, TRUE),
+(7, 'Martillo Demoledor 1500W', 1, 'Equipo pesado para demoliciones controladas', 'BOS-MD-1500', 2, 1, NULL, FALSE, TRUE),
+(8, 'Sierra Caladora 650W', 2, 'Sierra para cortes curvos en madera y metal', 'MAK-SCJ-65', 3, 1, NULL, FALSE, TRUE),
+(9, 'Destornillador Eléctrico Compacto', 3, 'Herramienta liviana para trabajos en altura', 'STA-DE-CO', 5, 1, NULL, FALSE, TRUE),
+(10, 'Fresadora Manual 1200W', 1, 'Para acabados finos en carpintería', 'BOS-FRE-12', 2, 1, NULL, FALSE, TRUE),
+(11, 'Rodamiento de Bolas 6205', 5, 'Rodamiento de uso general para ejes rotativos', 'SKF-RB-6205', 10, 2, NULL, FALSE, TRUE),
+(12, 'Eje de Transmisión 40mm', 5, 'Eje sólido de acero templado', 'SKF-ET-40', 3, 2, NULL, FALSE, TRUE),
+(13, 'Polea de Aluminio 100mm', 5, 'Polea para sistemas de transmisión por correa', 'SKF-PA-100', 4, 2, NULL, FALSE, TRUE),
+(14, 'Acoplamiento Flexible 2”', 5, 'Acoplamiento antivibración de goma y acero', 'SKF-ACF-2', 2, 2, NULL, FALSE, TRUE),
+(15, 'Soporte de Rodamiento UCFL205', 5, 'Base para rodamientos tipo UCFL', 'SKF-SR-205', 4, 2, NULL, FALSE, TRUE),
+(16, 'Chumacera Hierro Fundido', 5, 'Soporte reforzado para carga pesada', 'SKF-CH-01', 2, 2, NULL, FALSE, TRUE),
+(17, 'Cojinete de Empuje 51100', 5, 'Cojinete axial de acero endurecido', 'SKF-CE-51100', 3, 2, NULL, FALSE, TRUE),
+(18, 'Buje de Bronce 30mm', 5, 'Buje auto lubricado para maquinaria', 'SKF-BB-30', 4, 2, NULL, FALSE, TRUE),
+(19, 'Retén de Aceite 45x65x10', 5, 'Retén para ejes rotativos en bombas y motores', 'SKF-RA-4565', 6, 2, NULL, FALSE, TRUE),
+(20, 'Tuerca de Seguridad M20', 5, 'Tuerca con seguro mecánico antiaflojamiento', 'SKF-TS-M20', 5, 2, NULL, FALSE, TRUE),
+(21, 'Casco de Seguridad ABS', 4, 'Casco con suspensión ajustable y ventilación', '3M-CAS-ABS', 10, 3, '2026-01-01', TRUE, TRUE),
+(22, 'Lentes de Protección UV', 4, 'Lentes con filtro antirrayas y antiniebla', '3M-LEN-UV', 8, 3, '2025-11-01', TRUE, TRUE),
+(23, 'Guantes Anticorte Nivel 5', 4, 'Guantes con protección industrial de alta resistencia', '3M-GU-A5', 15, 3, '2025-09-01', TRUE, TRUE),
+(24, 'Protector Auditivo Tipo Copa', 4, 'Orejeras de alta atenuación de ruido', '3M-AUD-CO', 6, 3, '2025-10-01', TRUE, TRUE),
+(25, 'Botas de Seguridad con Puntera', 4, 'Botas dieléctricas con puntera de acero', '3M-BOT-P', 7, 3, '2027-01-01', TRUE, TRUE),
+(26, 'Chaleco Reflectante Alta Visibilidad', 4, 'Chaleco fluorescente con cintas retrorreflectantes', '3M-CHA-VIS', 10, 3, '2026-02-01', TRUE, TRUE),
+(27, 'Mascarilla N95 Industrial', 4, 'Protección respiratoria contra polvos y vapores', '3M-MAS-N95', 20, 3, '2025-07-01', TRUE, TRUE),
+(28, 'Arnés de Seguridad 4 Puntos', 4, 'Arnés para trabajo en altura con línea de vida', '3M-ARN-4P', 4, 3, '2026-04-01', TRUE, TRUE),
+(29, 'Cinturón Lumbar Reforzado', 4, 'Para carga manual de materiales pesados', '3M-CIN-LUM', 3, 3, NULL, FALSE, TRUE),
+(30, 'Gorro Térmico de Invierno', 4, 'Protección contra ambientes fríos extremos', '3M-GOR-TH', 5, 3, '2026-06-01', TRUE, TRUE),
+(31, 'Tornillo M6x40 Acero Zincado', 3, 'Tornillo hexagonal de uso estructural', 'STA-TOR-M6', 30, 4, NULL, FALSE, TRUE),
+(32, 'Perno de Anclaje 12x100mm', 3, 'Perno de fijación para hormigón', 'STA-PER-12', 25, 4, NULL, FALSE, TRUE),
+(33, 'Tuerca M6 Autotravante', 3, 'Tuerca con inserto de nylon', 'STA-TUE-M6', 40, 4, NULL, FALSE, TRUE),
+(34, 'Arandela Plana 10mm', 3, 'Distribuye carga en conexiones atornilladas', 'STA-ARA-10', 50, 4, NULL, FALSE, TRUE),
+(35, 'Taco de Expansión 8mm', 3, 'Taco plástico para fijaciones en muros', 'STA-TAC-8', 30, 4, NULL, FALSE, TRUE),
+(36, 'Remache Pop 4x10mm', 3, 'Remache para uniones de aluminio', 'STA-REM-4', 100, 4, NULL, FALSE, TRUE),
+(37, 'Perno Carrocería M10x80', 3, 'Perno con cabeza redonda y cuello cuadrado', 'STA-PER-M10', 20, 4, NULL, FALSE, TRUE),
+(38, 'Abrazadera Metálica 2”', 3, 'Para fijación de ductos o cables', 'STA-ABR-2', 15, 4, NULL, FALSE, TRUE),
+(39, 'Tornillo Auto-roscante 6x25', 3, 'Ideal para fijar planchas de acero', 'STA-TAR-625', 40, 4, NULL, FALSE, TRUE),
+(40, 'Kit Fijación Panel Solar', 3, 'Incluye tornillos, tuercas y soportes', 'STA-KIT-PS', 10, 4, NULL, FALSE, TRUE),
+(41, 'Cinta Aislante 3M Negra', 4, 'Cinta eléctrica resistente a 600V', '3M-CIN-AI', 50, 5, '2026-12-01', TRUE, TRUE),
+(42, 'Silicona Neutra Transparente', 4, 'Sellador universal para uso general', '3M-SIL-NT', 30, 5, '2026-05-01', TRUE, TRUE),
+(43, 'Adhesivo Epóxico 2K', 4, 'Pegamento de dos componentes', '3M-ADH-2K', 20, 5, '2026-09-01', TRUE, TRUE),
+(44, 'Lubricante Multiuso en Spray', 4, 'Lubricante penetrante con teflón', '3M-LUB-MU', 25, 5, '2026-03-01', TRUE, TRUE),
+(45, 'Cinta Doble Contacto 19mm', 4, 'Cinta para montaje de objetos ligeros', '3M-CIN-DC', 40, 5, '2027-01-01', TRUE, TRUE),
+(46, 'Esmalte Sintético Gris 1L', 4, 'Pintura para protección de superficies metálicas', '3M-ESM-GR', 15, 5, '2027-06-01', TRUE, TRUE),
+(47, 'Removedor de Óxido Industrial', 4, 'Líquido para limpieza de piezas oxidadas', '3M-REM-OX', 10, 5, '2026-11-01', TRUE, TRUE),
+(48, 'Toalla Industrial Absorbente', 4, 'Paño desechable para limpieza de aceites', '3M-TOA-IND', 60, 5, NULL, FALSE, TRUE),
+(49, 'Marcador Permanente Rojo', 4, 'Para marcaje de piezas metálicas', '3M-MAR-RO', 35, 5, NULL, FALSE, TRUE),
+(50, 'Spray de Zinc en Frío', 4, 'Protección anticorrosiva para soldaduras', '3M-ZINC-SP', 18, 5, '2026-10-01', TRUE, TRUE);
+
+
+-- Herramientas Eléctricas → Almacén 1
+INSERT INTO inventario_almacen (id_almacen, id_pieza, cantidad) VALUES
+(1, 1, 20),
+(1, 2, 20),
+(1, 3, 20),
+(1, 4, 20),
+(1, 5, 20),
+(1, 6, 20),
+(1, 7, 20),
+(1, 8, 20),
+(1, 9, 20),
+(1, 10, 20);
+
+-- Componentes Mecánicos → Almacén 2
+INSERT INTO inventario_almacen (id_almacen, id_pieza, cantidad) VALUES
+(2, 11, 20),
+(2, 12, 20),
+(2, 13, 20),
+(2, 14, 20),
+(2, 15, 20),
+(2, 16, 20),
+(2, 17, 20),
+(2, 18, 20),
+(2, 19, 20),
+(2, 20, 20);
+
+-- Elementos de Seguridad → Almacén 3
+INSERT INTO inventario_almacen (id_almacen, id_pieza, cantidad) VALUES
+(3, 21, 20),
+(3, 22, 20),
+(3, 23, 20),
+(3, 24, 20),
+(3, 25, 20),
+(3, 26, 20),
+(3, 27, 20),
+(3, 28, 20),
+(3, 29, 20),
+(3, 30, 20);
+
+-- Sistemas de Fijación → Almacén 4
+INSERT INTO inventario_almacen (id_almacen, id_pieza, cantidad) VALUES
+(4, 31, 20),
+(4, 32, 20),
+(4, 33, 20),
+(4, 34, 20),
+(4, 35, 20),
+(4, 36, 20),
+(4, 37, 20),
+(4, 38, 20),
+(4, 39, 20),
+(4, 40, 20);
+
+-- Materiales Consumibles → Almacén 5
+INSERT INTO inventario_almacen (id_almacen, id_pieza, cantidad) VALUES
+(5, 41, 20),
+(5, 42, 20),
+(5, 43, 20),
+(5, 44, 20),
+(5, 45, 20),
+(5, 46, 20),
+(5, 47, 20),
+(5, 48, 20),
+(5, 49, 20),
+(5, 50, 20);
+
+INSERT INTO kit (id_kit, nombre, descripcion, estado) VALUES
+(1, 'Kit Electricista Básico', 'Kit con herramientas eléctricas esenciales para instalaciones básicas', TRUE),
+(2, 'Kit Mecánico Intermedio', 'Conjunto de piezas mecánicas para reparaciones estándar', TRUE),
+(3, 'Kit Seguridad Personal', 'Equipos de protección personal para trabajos en obra', TRUE),
+(4, 'Kit Instalador Solar', 'Componentes y fijaciones para instalación de paneles solares', TRUE),
+(5, 'Kit Mantenimiento General', 'Herramientas y materiales para mantenimiento preventivo', TRUE),
+(6, 'Kit Carpintería Industrial', 'Herramientas para corte, ensamblado y acabado de madera', TRUE);
+
+-- Kit 1: Electricista Básico
+INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES
+(1, 1, 1),
+(1, 4, 1),
+(1, 5, 1),
+(1, 10, 1),
+(1, 41, 2),
+(1, 42, 2),
+(1, 45, 2),
+(1, 46, 1),
+(1, 49, 1);
+
+-- Kit 2: Mecánico Intermedio
+INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES
+(2, 11, 2),
+(2, 12, 1),
+(2, 13, 1),
+(2, 14, 1),
+(2, 15, 1),
+(2, 16, 1),
+(2, 17, 1),
+(2, 18, 1),
+(2, 20, 2);
+
+-- Kit 3: Seguridad Personal
+INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES
+(3, 21, 1),
+(3, 22, 1),
+(3, 23, 1),
+(3, 24, 1),
+(3, 25, 1),
+(3, 26, 1),
+(3, 27, 2),
+(3, 28, 1),
+(3, 29, 1);
+
+-- Kit 4: Instalador Solar
+INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES
+(4, 2, 1),
+(4, 40, 1),
+(4, 31, 10),
+(4, 32, 5),
+(4, 33, 5),
+(4, 34, 10),
+(4, 35, 10),
+(4, 36, 10),
+(4, 38, 5);
+
+-- Kit 5: Mantenimiento General
+INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES
+(5, 3, 1),
+(5, 5, 1),
+(5, 19, 1),
+(5, 44, 1),
+(5, 46, 1),
+(5, 47, 1),
+(5, 48, 5),
+(5, 49, 1),
+(5, 50, 1);
+
+-- Kit 6: Carpintería Industrial
+INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES
+(6, 2, 1),
+(6, 8, 1),
+(6, 10, 1),
+(6, 37, 10),
+(6, 39, 10),
+(6, 42, 1),
+(6, 43, 1),
+(6, 44, 1),
+(6, 45, 2);
+
+
+
+
+INSERT INTO usuario (id_usuario,p_nombre,s_nombre,a_paterno,a_materno,correo,contrasena,direccion,id_comuna,id_tipo_usuario,id_almacen,estado) VALUES
+	 (1,'Vicente',NULL,'Rivera','Alvarez','vice.riveraa@duocuc.cl','15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225','Manqueque 389',330,1,NULL,1),
+	 (2,'Alvaro','Israel','Barrera',NULL,'churrasquito.psn@gmail.com','12345','No tengo casa 32389',170,2,4,1);
