@@ -37,8 +37,9 @@ CREATE TABLE estado_proyecto (
 
 CREATE TABLE tipo_movimiento (
     id_tipo_movimiento INT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL UNIQUE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    descripcion TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE region (
     id_region INT PRIMARY KEY,
