@@ -64,21 +64,25 @@ def editar_usuario(usuario: UsuarioEdit):
         cursor.execute("""
             UPDATE usuario
             SET p_nombre = %s,
+                s_nombre = %s,
+                a_paterno = $s,
+                a_materno = %s,
                 correo = %s,
                 direccion = %s,
                 id_comuna = %s,
                 id_tipo_usuario = %s,
                 id_almacen = %s,
-                estado = %s
             WHERE id_usuario = %s
         """, (
-            usuario.nombre,
+            usuario.p_nombre,
+            usuario.s_nombre,
+            usuario.a_paterno,
+            usuario.a_materno,
             usuario.correo,
             usuario.direccion,
             usuario.id_comuna,
             usuario.id_tipo_usuario,
             usuario.id_almacen,
-            usuario.estado,
             usuario.id_usuario
         ))
         conn.commit()
