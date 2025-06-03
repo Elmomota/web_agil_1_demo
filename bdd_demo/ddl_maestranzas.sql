@@ -185,17 +185,19 @@ CREATE TABLE kit_pieza (
     FOREIGN KEY (id_pieza) REFERENCES pieza(id_pieza)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- USO DE KITS EN PROYECTOS
-CREATE TABLE uso_kit (
-    id_uso INT AUTO_INCREMENT PRIMARY KEY,
-    id_kit INT NOT NULL,
+CREATE TABLE detalle_pieza_proyecto (
+    id_detalle INT NOT NULL,
     id_proyecto INT NOT NULL,
-    id_usuario INT NOT NULL,
-    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_kit) REFERENCES kit(id_kit),
+    id_pieza INT NOT NULL,
+    id_kit INT NULL,
+    cantidad INT NOT NULL,
+    fecha_asignacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_detalle, id_proyecto),
     FOREIGN KEY (id_proyecto) REFERENCES proyecto(id_proyecto),
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+    FOREIGN KEY (id_pieza) REFERENCES pieza(id_pieza),
+    FOREIGN KEY (id_kit) REFERENCES kit(id_kit)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- MOVIMIENTOS DE INVENTARIO
 CREATE TABLE movimiento_inventario (
