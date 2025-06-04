@@ -17,8 +17,8 @@ def agregar_pieza(data: PiezaCreate):
     return {"message": "Pieza agregada correctamente"}
 
 @router.put("/piezas/{id_pieza}")
-def actualizar_pieza(id_pieza: int, data: PiezaUpdate):
-    piezas.actualizar_pieza(id_pieza, data)
+def actualizar_pieza(id_usuario: int, id_pieza: int, data: PiezaUpdate):
+    piezas.actualizar_pieza(id_usuario, id_pieza, data)
     return {"message": "Pieza actualizada correctamente"}
 
 @router.delete("/piezas/{id_pieza}")

@@ -91,7 +91,7 @@ def crear_pieza(data: PiezaCreate):
     cursor.close()
     conn.close()
 
-def actualizar_pieza(id_pieza: int, data: PiezaUpdate):
+def actualizar_pieza(id_usuario: int, id_pieza: int, data: PiezaUpdate):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT estado FROM pieza WHERE id_pieza = %s", (id_pieza,))
@@ -173,6 +173,20 @@ def actualizar_pieza(id_pieza: int, data: PiezaUpdate):
                 VALUES (%s, %s, %s)
             ''', (id_almacen_nuevo, id_pieza, nueva_cantidad))
 
+        observacion = f"Transferencia de almacén desde ID {id_almacen_actual} hacia ID {id_almacen_nuevo}"
+
+        # Insertar en movimiento_inventario
+        cursor.execute('''
+            INSERT INTO movimiento_inventario (
+                id_pieza, id_tipo_movimiento, cantidad,
+                id_usuario, id_proyecto, observaciones, id_almacen
+            )
+            VALUES (%s, %s, %s, %s, NULL, %s, %s)
+        ''', (
+            id_pieza, 3, nueva_cantidad,
+            id_usuario, observacion, id_almacen_nuevo
+        ))
+        
         # Notificar a nuevos gestores del nuevo almacén
         cursor.execute('''
             SELECT correo, p_nombre FROM usuario

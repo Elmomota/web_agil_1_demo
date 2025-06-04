@@ -46,6 +46,41 @@ def obtener_inventario_usuario(id_usuario: int, search: str = None, id_categoria
     return cursor.fetchall()
 
 
+def obtener_todo_inventario( search: str = None, id_categoria: int = None):
+    db = get_connection()
+    cursor = db.cursor(dictionary=True)
+
+
+    query = """
+        SELECT 
+            p.id_pieza, p.nombre, p.descripcion, p.numero_serie,
+            p.stock_minimo, p.fecha_vencimiento, p.alerta_vencimiento,
+            p.estado, p.id_categoria, p.id_marca,
+            m.nombre AS nombre_marca, m.descripcion AS desc_marca,
+            c.nombre AS nombre_categoria, c.descripcion AS desc_categoria,
+            ia.cantidad
+        FROM inventario_almacen ia
+        JOIN pieza p ON ia.id_pieza = p.id_pieza
+        JOIN marca m ON p.id_marca = m.id_marca
+        JOIN categoria c ON p.id_categoria = c.id_categoria
+        p.estado = 1
+    """
+
+    params = []
+
+    if search:
+        query += " AND (p.nombre LIKE %s OR p.descripcion LIKE %s)"
+        search_term = f"%{search}%"
+        params.extend([search_term, search_term])
+
+    if id_categoria:
+        query += " AND p.id_categoria = %s"
+        params.append(id_categoria)
+
+    cursor.execute(query, tuple(params))
+    return cursor.fetchall()
+
+
 
 def actualizar_stock(id_usuario: int, data: StockUpdate):
     db = get_connection()

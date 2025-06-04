@@ -361,8 +361,8 @@ INSERT INTO tipo_movimiento (id_tipo_movimiento, nombre, descripcion) VALUES
 (1, 'Entrada', 'Ingreso de nuevas unidades al inventario, generalmente por compra o recepción.'), --este tiene acceso el bodeguero
 (2, 'Salida', 'Salida manual del inventario, ya sea por consumo, baja o eliminación.'), --este tiene acceso el bodeguero
 (3, 'Transferencia', 'Movimiento de piezas entre distintos almacenes.'), --este tiene acceso el bodeguero
-(4, 'Devolucion', 'Devolución de piezas previamente entregadas o asignadas.'), --debiese ser automatico si se quita una pieza 
-(5, 'Uso proyecto', 'Asignación de piezas directamente a un proyecto.'),
+(4, 'Devolucion', 'Devolución de piezas previamente entregadas o asignadas.'), --debiese ser si se quita una pieza de un proyecto, debiese validar si es un kit, si es un kit debe eliminarse todas las piezas de eso proyecto con ese kit en especifico
+(5, 'Uso proyecto', 'Asignación de piezas directamente a un proyecto.'), --debiese ser cuando un empleado de un proyecto agrege piezas o kits a un proyecto
 (6, 'Correccion', 'Ajuste manual por errores de stock, daño o diferencias de conteo.'); --este tiene acceso el bodeguero
 
 
