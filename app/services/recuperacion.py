@@ -48,7 +48,9 @@ def enviar_codigo_recuperacion(correo: EmailStr):
         print("Error general:", traceback.format_exc())
         raise HTTPException(status_code=500, detail="Error al enviar el código")
 
-   
+    finally:
+        cursor.close()
+        conn.close()  
         
 
 def verificar_codigo_recuperacion(correo: EmailStr, codigo: str):
@@ -75,6 +77,10 @@ def verificar_codigo_recuperacion(correo: EmailStr, codigo: str):
     except Exception as e:
         print("Error en verificación:", traceback.format_exc())
         raise HTTPException(status_code=500, detail="Error al verificar el código")
+    
+    finally:
+        cursor.close()
+        conn.close()
 
         
 
