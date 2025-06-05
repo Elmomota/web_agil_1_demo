@@ -357,13 +357,20 @@ INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (340, 'Timaukel', 16);
 INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (341, 'Cabo de Hornos', 16);
 
 
+
+--1: este tiene acceso el bodeguero
+--2: este tiene acceso el bodeguero
+--3: este tiene acceso el bodeguero
+--4: debiese ser si se quita una pieza de un proyecto, debiese validar si es un kit, si es un kit debe eliminarse todas las piezas de eso proyecto con ese kit en especifico
+--5: debiese ser cuando un empleado de un proyecto agrege piezas o kits a un proyecto
+--6: este tiene acceso el bodeguero
 INSERT INTO tipo_movimiento (id_tipo_movimiento, nombre, descripcion) VALUES
-(1, 'Entrada', 'Ingreso de nuevas unidades al inventario, generalmente por compra o recepción.'), --este tiene acceso el bodeguero
-(2, 'Salida', 'Salida manual del inventario, ya sea por consumo, baja o eliminación.'), --este tiene acceso el bodeguero
-(3, 'Transferencia', 'Movimiento de piezas entre distintos almacenes.'), --este tiene acceso el bodeguero
-(4, 'Devolucion', 'Devolución de piezas previamente entregadas o asignadas.'), --debiese ser si se quita una pieza de un proyecto, debiese validar si es un kit, si es un kit debe eliminarse todas las piezas de eso proyecto con ese kit en especifico
-(5, 'Uso proyecto', 'Asignación de piezas directamente a un proyecto.'), --debiese ser cuando un empleado de un proyecto agrege piezas o kits a un proyecto
-(6, 'Correccion', 'Ajuste manual por errores de stock, daño o diferencias de conteo.'); --este tiene acceso el bodeguero
+(1, 'Entrada', 'Ingreso de nuevas unidades al inventario, generalmente por compra o recepción.'), 
+(2, 'Salida', 'Salida manual del inventario, ya sea por consumo, baja o eliminación.'), 
+(3, 'Transferencia', 'Movimiento de piezas entre distintos almacenes.'), 
+(4, 'Devolucion', 'Devolución de piezas previamente entregadas o asignadas.'), 
+(5, 'Uso proyecto', 'Asignación de piezas directamente a un proyecto.'), 
+(6, 'Correccion', 'Ajuste manual por errores de stock, daño o diferencias de conteo.'); 
 
 
 -- Poblar la tabla tipo_usuario con perfiles del sistema
@@ -421,16 +428,16 @@ VALUES
 (18, 'Buje de Bronce 30mm', 5, 'Buje auto lubricado para maquinaria', 'SKF-BB-30', 4, 2, NULL, FALSE, TRUE),
 (19, 'Retén de Aceite 45x65x10', 5, 'Retén para ejes rotativos en bombas y motores', 'SKF-RA-4565', 6, 2, NULL, FALSE, TRUE),
 (20, 'Tuerca de Seguridad M20', 5, 'Tuerca con seguro mecánico antiaflojamiento', 'SKF-TS-M20', 5, 2, NULL, FALSE, TRUE),
-(21, 'Casco de Seguridad ABS', 4, 'Casco con suspensión ajustable y ventilación', '3M-CAS-ABS', 10, 3, '2026-01-01', TRUE, TRUE),
-(22, 'Lentes de Protección UV', 4, 'Lentes con filtro antirrayas y antiniebla', '3M-LEN-UV', 8, 3, '2025-11-01', TRUE, TRUE),
-(23, 'Guantes Anticorte Nivel 5', 4, 'Guantes con protección industrial de alta resistencia', '3M-GU-A5', 15, 3, '2025-09-01', TRUE, TRUE),
-(24, 'Protector Auditivo Tipo Copa', 4, 'Orejeras de alta atenuación de ruido', '3M-AUD-CO', 6, 3, '2025-10-01', TRUE, TRUE),
-(25, 'Botas de Seguridad con Puntera', 4, 'Botas dieléctricas con puntera de acero', '3M-BOT-P', 7, 3, '2027-01-01', TRUE, TRUE),
-(26, 'Chaleco Reflectante Alta Visibilidad', 4, 'Chaleco fluorescente con cintas retrorreflectantes', '3M-CHA-VIS', 10, 3, '2026-02-01', TRUE, TRUE),
-(27, 'Mascarilla N95 Industrial', 4, 'Protección respiratoria contra polvos y vapores', '3M-MAS-N95', 20, 3, '2025-07-01', TRUE, TRUE),
-(28, 'Arnés de Seguridad 4 Puntos', 4, 'Arnés para trabajo en altura con línea de vida', '3M-ARN-4P', 4, 3, '2026-04-01', TRUE, TRUE),
+(21, 'Casco de Seguridad ABS', 4, 'Casco con suspensión ajustable y ventilación', '3M-CAS-ABS', 10, 3, '2026-01-01', FALSE, TRUE),
+(22, 'Lentes de Protección UV', 4, 'Lentes con filtro antirrayas y antiniebla', '3M-LEN-UV', 8, 3, '2025-11-01', FALSE, TRUE),
+(23, 'Guantes Anticorte Nivel 5', 4, 'Guantes con protección industrial de alta resistencia', '3M-GU-A5', 15, 3, '2025-09-01', FALSE, TRUE),
+(24, 'Protector Auditivo Tipo Copa', 4, 'Orejeras de alta atenuación de ruido', '3M-AUD-CO', 6, 3, '2025-10-01', FALSE, TRUE),
+(25, 'Botas de Seguridad con Puntera', 4, 'Botas dieléctricas con puntera de acero', '3M-BOT-P', 7, 3, '2027-01-01', FALSE, TRUE),
+(26, 'Chaleco Reflectante Alta Visibilidad', 4, 'Chaleco fluorescente con cintas retrorreflectantes', '3M-CHA-VIS', 10, 3, '2026-02-01', FALSE, TRUE),
+(27, 'Mascarilla N95 Industrial', 4, 'Protección respiratoria contra polvos y vapores', '3M-MAS-N95', 20, 3, '2025-07-01', FALSE, TRUE),
+(28, 'Arnés de Seguridad 4 Puntos', 4, 'Arnés para trabajo en altura con línea de vida', '3M-ARN-4P', 4, 3, '2026-04-01', FALSE, TRUE),
 (29, 'Cinturón Lumbar Reforzado', 4, 'Para carga manual de materiales pesados', '3M-CIN-LUM', 3, 3, NULL, FALSE, TRUE),
-(30, 'Gorro Térmico de Invierno', 4, 'Protección contra ambientes fríos extremos', '3M-GOR-TH', 5, 3, '2026-06-01', TRUE, TRUE),
+(30, 'Gorro Térmico de Invierno', 4, 'Protección contra ambientes fríos extremos', '3M-GOR-TH', 5, 3, '2026-06-01', FALSE, TRUE),
 (31, 'Tornillo M6x40 Acero Zincado', 3, 'Tornillo hexagonal de uso estructural', 'STA-TOR-M6', 30, 4, NULL, FALSE, TRUE),
 (32, 'Perno de Anclaje 12x100mm', 3, 'Perno de fijación para hormigón', 'STA-PER-12', 25, 4, NULL, FALSE, TRUE),
 (33, 'Tuerca M6 Autotravante', 3, 'Tuerca con inserto de nylon', 'STA-TUE-M6', 40, 4, NULL, FALSE, TRUE),
@@ -441,16 +448,16 @@ VALUES
 (38, 'Abrazadera Metálica 2”', 3, 'Para fijación de ductos o cables', 'STA-ABR-2', 15, 4, NULL, FALSE, TRUE),
 (39, 'Tornillo Auto-roscante 6x25', 3, 'Ideal para fijar planchas de acero', 'STA-TAR-625', 40, 4, NULL, FALSE, TRUE),
 (40, 'Kit Fijación Panel Solar', 3, 'Incluye tornillos, tuercas y soportes', 'STA-KIT-PS', 10, 4, NULL, FALSE, TRUE),
-(41, 'Cinta Aislante 3M Negra', 4, 'Cinta eléctrica resistente a 600V', '3M-CIN-AI', 50, 5, '2026-12-01', TRUE, TRUE),
-(42, 'Silicona Neutra Transparente', 4, 'Sellador universal para uso general', '3M-SIL-NT', 30, 5, '2026-05-01', TRUE, TRUE),
-(43, 'Adhesivo Epóxico 2K', 4, 'Pegamento de dos componentes', '3M-ADH-2K', 20, 5, '2026-09-01', TRUE, TRUE),
-(44, 'Lubricante Multiuso en Spray', 4, 'Lubricante penetrante con teflón', '3M-LUB-MU', 25, 5, '2026-03-01', TRUE, TRUE),
-(45, 'Cinta Doble Contacto 19mm', 4, 'Cinta para montaje de objetos ligeros', '3M-CIN-DC', 40, 5, '2027-01-01', TRUE, TRUE),
-(46, 'Esmalte Sintético Gris 1L', 4, 'Pintura para protección de superficies metálicas', '3M-ESM-GR', 15, 5, '2027-06-01', TRUE, TRUE),
-(47, 'Removedor de Óxido Industrial', 4, 'Líquido para limpieza de piezas oxidadas', '3M-REM-OX', 10, 5, '2026-11-01', TRUE, TRUE),
+(41, 'Cinta Aislante 3M Negra', 4, 'Cinta eléctrica resistente a 600V', '3M-CIN-AI', 50, 5, '2026-12-01', FALSE, TRUE),
+(42, 'Silicona Neutra Transparente', 4, 'Sellador universal para uso general', '3M-SIL-NT', 30, 5, '2026-05-01', FALSE, TRUE),
+(43, 'Adhesivo Epóxico 2K', 4, 'Pegamento de dos componentes', '3M-ADH-2K', 20, 5, '2026-09-01', FALSE, TRUE),
+(44, 'Lubricante Multiuso en Spray', 4, 'Lubricante penetrante con teflón', '3M-LUB-MU', 25, 5, '2026-03-01', FALSE, TRUE),
+(45, 'Cinta Doble Contacto 19mm', 4, 'Cinta para montaje de objetos ligeros', '3M-CIN-DC', 40, 5, '2027-01-01', FALSE, TRUE),
+(46, 'Esmalte Sintético Gris 1L', 4, 'Pintura para protección de superficies metálicas', '3M-ESM-GR', 15, 5, '2027-06-01', FALSE, TRUE),
+(47, 'Removedor de Óxido Industrial', 4, 'Líquido para limpieza de piezas oxidadas', '3M-REM-OX', 10, 5, '2026-11-01', FALSE, TRUE),
 (48, 'Toalla Industrial Absorbente', 4, 'Paño desechable para limpieza de aceites', '3M-TOA-IND', 60, 5, NULL, FALSE, TRUE),
 (49, 'Marcador Permanente Rojo', 4, 'Para marcaje de piezas metálicas', '3M-MAR-RO', 35, 5, NULL, FALSE, TRUE),
-(50, 'Spray de Zinc en Frío', 4, 'Protección anticorrosiva para soldaduras', '3M-ZINC-SP', 18, 5, '2026-10-01', TRUE, TRUE);
+(50, 'Spray de Zinc en Frío', 4, 'Protección anticorrosiva para soldaduras', '3M-ZINC-SP', 18, 5, '2026-10-01', FALSE, TRUE);
 
 
 -- Herramientas Eléctricas → Almacén 1

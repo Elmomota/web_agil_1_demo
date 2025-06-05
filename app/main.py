@@ -1,5 +1,6 @@
 from threading import Thread
 import time
+from datetime import datetime
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,17 +16,18 @@ import multiprocessing
 
 def scheduler():
     while True:
-        print("Verificando piezas vencidas...")
+        ahora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"Verificando piezas vencidas... [{ahora}]")
         verificar_piezas_vencidas()
         time.sleep(60 * 5)  # cada 5 minutos para demo
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("🚀 Lifespan iniciado")
+    print("Lifespan iniciado")
     t = Thread(target=scheduler, daemon=True)
     t.start()
     yield  # Aquí arranca la app
-    print("🛑 Lifespan finalizado")
+    print("Lifespan finalizado")
 
 
 app = FastAPI(lifespan=lifespan)
