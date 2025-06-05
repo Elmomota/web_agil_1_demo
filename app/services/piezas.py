@@ -181,9 +181,9 @@ def actualizar_pieza(id_usuario: int, id_pieza: int, data: PiezaUpdate):
                 id_pieza, id_tipo_movimiento, cantidad,
                 id_usuario, id_proyecto, observaciones, id_almacen
             )
-            VALUES (%s, %s, %s, %s, NULL, %s, %s)
+            VALUES (%s, 3, %s, %s, NULL, %s, %s)
         ''', (
-            id_pieza, 3, nueva_cantidad,
+            id_pieza, nueva_cantidad, 
             id_usuario, observacion, id_almacen_nuevo
         ))
         
@@ -213,6 +213,7 @@ def eliminar_pieza(id_pieza: int):
     conn.commit()
     cursor.close()
     conn.close()
+    
 
 # KIT CRUD
 

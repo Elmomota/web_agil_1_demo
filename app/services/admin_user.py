@@ -118,25 +118,34 @@ def eliminar_usuario(id_usuario: int):
 def listar_usuarios_service() -> list[Usuario]:
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT id_usuario, p_nombre, correo, direccion, id_comuna, id_tipo_usuario, id_almacen, estado
-        FROM usuario
-        WHERE estado = TRUE
-    """)
-    rows = cursor.fetchall()
+    try:
+        cursor.execute("""
+            SELECT id_usuario, p_nombre, correo, direccion, id_comuna, id_tipo_usuario, id_almacen, estado
+            FROM usuario
+            WHERE estado = TRUE
+        """)
+        rows = cursor.fetchall()
 
-    usuarios = [
-        Usuario(
-            id_usuario=row[0],
-            nombre=row[1],
-            correo=row[2],
-            direccion=row[3],
-            id_comuna=row[4],
-            id_tipo_usuario=row[5],
-            id_almacen=row[6],
-            estado=bool(row[7])
-        )
-        for row in rows
-    ]
+        usuarios = [
+            Usuario(
+                id_usuario=row[0],
+                nombre=row[1],
+                correo=row[2],
+                direccion=row[3],
+                id_comuna=row[4],
+                id_tipo_usuario=row[5],
+                id_almacen=row[6],
+                estado=bool(row[7])
+            )
+            for row in rows
+        ]
 
-    return usuarios
+        return usuarios
+    
+    except Exception as e:
+        conn.rollback()
+        raise e
+
+    finally:
+        cursor.close()
+        conn.close()
