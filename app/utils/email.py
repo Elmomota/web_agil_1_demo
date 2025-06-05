@@ -46,3 +46,25 @@ def enviar_correo(destinatario: EmailStr, asunto: str, cuerpo: str):
     except Exception:
         print("Error general al enviar correo:", traceback.format_exc())
         raise HTTPException(status_code=500, detail="Error al enviar el correo")
+
+
+
+def notificar_admin_pieza_vencida(correo_admin, nombre_admin, nombre_pieza, fecha_vencimiento):
+    asunto = f"Pieza vencida: {nombre_pieza}"
+    cuerpo = (
+        f"Estimado(a) {nombre_admin},\n\n"
+        f"La pieza '{nombre_pieza}' ha vencido el {fecha_vencimiento} y fue desactivada automáticamente.\n"
+        f"Por favor, verifique si la acción en el sistema quedó efectuada.\n\n"
+        "Sistema de Inventario - Maestranzas Unidos S.A."
+    )
+    enviar_correo(correo_admin, asunto, cuerpo)
+
+
+def notificar_gestores_remocion(correo, nombre, nombre_pieza):
+    asunto = f"Remoción física de pieza vencida: {nombre_pieza}"
+    cuerpo = (
+        f"Estimado(a) {nombre}, \n\n"
+        f"la pieza '{nombre_pieza}' venció y ha sido desactivada. Debe ser retirada del almacén físicamente.\n\n"
+        "Sistema de Inventario - Maestranzas Unidos S.A."
+    )
+    enviar_correo(correo, asunto, cuerpo)
