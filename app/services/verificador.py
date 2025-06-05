@@ -1,6 +1,6 @@
 from datetime import datetime
 from app.db.db_connection import get_connection
-from app.utils.email import notificar_admin_pieza_vencida, notificar_gestores_remocion
+from app.utils.email import notificar_admin_pieza_vencida, notificar_gestores_remocion, enviar_correo_alerta_stock_bajo
 
 def verificar_piezas_vencidas():
     conn = get_connection()
@@ -51,3 +51,34 @@ def verificar_piezas_vencidas():
     conn.commit()
     cursor.close()
     conn.close()
+
+
+
+def verificar_stock_bajo():
+    db = get_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        query = """
+            SELECT 
+                ia.id_pieza, p.nombre, ia.id_almacen, ia.cantidad, p.stock_minimo
+            FROM inventario_almacen ia
+            JOIN pieza p ON ia.id_pieza = p.id_pieza
+            WHERE ia.cantidad <= p.stock_minimo AND p.estado = 1
+        """
+        cursor.execute(query)
+        piezas_bajo_stock = cursor.fetchall()
+
+        # Notificar al gestor del almacén correspondiente
+        for pieza in piezas_bajo_stock:
+            cursor.execute("""
+                SELECT correo FROM usuario 
+                WHERE id_almacen = %s AND id_tipo_usuario = 2 AND estado = 1
+            """, (pieza['id_almacen'],))
+            gestores = cursor.fetchall()
+
+            for gestor in gestores:
+                enviar_correo_alerta_stock_bajo(gestor['correo'], pieza)
+
+    finally:
+        cursor.close()
+        db.close()

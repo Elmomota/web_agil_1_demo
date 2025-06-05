@@ -10,15 +10,16 @@ from app.routers import admin_user
 from app.routers import piezas
 from app.routers import bodeguero
 from app.routers import movimiento_inventario
-from app.services.verificador import verificar_piezas_vencidas
+from app.services.verificador import verificar_piezas_vencidas, verificar_stock_bajo
 
 import multiprocessing
 
 def scheduler():
     while True:
         ahora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"Verificando piezas vencidas... [{ahora}]")
+        print(f"Verificando piezas con problemas... [{ahora}]")
         verificar_piezas_vencidas()
+        verificar_stock_bajo()
         time.sleep(60 * 5)  # cada 5 minutos para demo
 
 @asynccontextmanager

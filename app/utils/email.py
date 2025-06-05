@@ -68,3 +68,14 @@ def notificar_gestores_remocion(correo, nombre, nombre_pieza):
         "Sistema de Inventario - Maestranzas Unidos S.A."
     )
     enviar_correo(correo, asunto, cuerpo)
+
+
+def enviar_correo_alerta_stock_bajo(destinatario, pieza):
+    asunto = f"⚠️ Stock bajo: {pieza['nombre']} (ID {pieza['id_pieza']})"
+    cuerpo = (
+        f"La pieza \"{pieza['nombre']}\" (ID {pieza['id_pieza']}) ha alcanzado un nivel crítico de stock.\n\n"
+        f"Cantidad actual: {pieza['cantidad']} (mínimo permitido: {pieza['stock_minimo']})\n"
+        f"Por favor, revisar reposición en el almacén ID {pieza['id_almacen']}, que usted está asignado.\n\n"
+        "Sistema de Inventario - Maestranzas Unidos S.A."
+    )
+    enviar_correo(destinatario, asunto, cuerpo)
