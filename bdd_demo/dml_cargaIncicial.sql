@@ -376,6 +376,7 @@ INSERT INTO tipo_usuario (id_tipo_usuario, nombre) VALUES
 (6, 'Gerente de Proyectos'),
 (7, 'Trabajador de Planta');
 
+
 INSERT INTO almacen (id_almacen, nombre, direccion, id_comuna, estado) VALUES
 (1, 'Almacén de Herramientas Eléctricas', 'Av. Talleres 1234', 101, TRUE),
 (2, 'Almacén de Componentes Mecánicos', 'Calle Maestranza 5678', 102, TRUE),
