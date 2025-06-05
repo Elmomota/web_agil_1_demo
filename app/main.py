@@ -1,6 +1,6 @@
 from threading import Thread
 import time
-
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import recuperacion
@@ -11,16 +11,24 @@ from app.routers import bodeguero
 from app.routers import movimiento_inventario
 from app.services.verificador import verificar_piezas_vencidas
 
+import multiprocessing
 
 def scheduler():
     while True:
+        print("Verificando piezas vencidas...")
         verificar_piezas_vencidas()
-        time.sleep(3600 * 6)  # cada 6 horas
+        time.sleep(60 * 5)  # cada 5 minutos para demo
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("🚀 Lifespan iniciado")
+    t = Thread(target=scheduler, daemon=True)
+    t.start()
+    yield  # Aquí arranca la app
+    print("🛑 Lifespan finalizado")
 
 
-import multiprocessing
-
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 # CORS
 app.add_middleware(
@@ -40,15 +48,7 @@ app.include_router(bodeguero.router, prefix= "/api")
 app.include_router(movimiento_inventario.router, prefix= "/api")
 
 
-def scheduler():
-    while True:
-        verificar_piezas_vencidas()
-        time.sleep(3600 * 6)  # cada 6 horas
 
-@app.on_event("startup")
-def iniciar_verificacion():
-    t = Thread(target=scheduler, daemon=True)
-    t.start()
 
 
 
