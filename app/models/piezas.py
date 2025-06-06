@@ -35,7 +35,6 @@ class PiezaUpdate(BaseModel):
     id_categoria: Optional[int]
     fecha_vencimiento: Optional[str]
     id_almacen: Optional[int]
-    cantidad: Optional[int]
 
 
 class PiezaOut(BaseModel):

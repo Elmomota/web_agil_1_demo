@@ -129,8 +129,10 @@ def actualizar_stock(id_usuario: int, data: StockUpdate):
 
         if data.id_tipo_movimiento == 1 and nueva_cantidad <= stock_actual:
             raise HTTPException(status_code=400, detail="Cantidad debe ser mayor al stock actual para movimiento tipo ENTRADA")
-        elif data.id_tipo_movimiento == 2 and nueva_cantidad >= stock_actual:
+        if data.id_tipo_movimiento == 2 and nueva_cantidad >= stock_actual:
             raise HTTPException(status_code=400, detail="Cantidad debe ser menor al stock actual para movimiento tipo SALIDA")
+        if data.id_tipo_movimiento == 6 and nueva_cantidad == stock_actual:
+            raise HTTPException(status_code=400, detail="Cantidad debe ser distinta al stock actual para movimiento tipo CORRECCION")
 
         # Actualizar inventario
         cursor.execute("""
