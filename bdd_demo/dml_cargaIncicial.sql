@@ -357,6 +357,14 @@ INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (340, 'Timaukel', 16);
 INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (341, 'Cabo de Hornos', 16);
 
 
+INSERT INTO tipo_movimiento (id_tipo_movimiento, nombre, descripcion) VALUES
+(1, 'Entrada', 'Ingreso de nuevas unidades al inventario, generalmente por compra o recepción.'), --este tiene acceso el bodeguero
+(2, 'Salida', 'Salida manual del inventario, ya sea por consumo, baja o eliminación.'), --este tiene acceso el bodeguero
+(3, 'Transferencia', 'Movimiento de piezas entre distintos almacenes.'), --este tiene acceso el bodeguero
+(4, 'Devolucion', 'Devolución de piezas previamente entregadas o asignadas.'), --debiese ser automatico si se quita una pieza 
+(5, 'Uso proyecto', 'Asignación de piezas directamente a un proyecto.'),
+(6, 'Correccion', 'Ajuste manual por errores de stock, daño o diferencias de conteo.'); --este tiene acceso el bodeguero
+
 
 -- Poblar la tabla tipo_usuario con perfiles del sistema
 INSERT INTO tipo_usuario (id_tipo_usuario, nombre) VALUES
