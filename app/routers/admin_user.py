@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from app.services.admin_user import crear_usuario, editar_usuario, eliminar_usuario, listar_usuarios_service
-from app.models.usuario import UsuarioCreate, UsuarioEdit,Usuario
+from app.models.usuario import UsuarioCreate, UsuarioEdit,Usuario,UsuarioOutExtendido
 from typing import Dict, List
 
 router = APIRouter(prefix="/admin/usuarios", tags=["Administración de Usuarios"])
@@ -17,6 +17,6 @@ def editar_usuario_endpoint(usuario: UsuarioEdit):
 def eliminar_usuario_endpoint(id_usuario: int):
     return eliminar_usuario(id_usuario)
 
-@router.get("/listar", response_model=list[Usuario])
+@router.get("/listar", response_model=list[UsuarioOutExtendido])
 def listar_usuarios():
     return listar_usuarios_service()

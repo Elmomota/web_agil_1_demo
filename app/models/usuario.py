@@ -32,3 +32,13 @@ class UsuarioEdit(BaseModel):
     id_tipo_usuario: int
     id_almacen: Optional[int]
     estado: bool
+
+class UsuarioOutExtendido(BaseModel):
+    id_usuario: int
+    nombre: str
+    correo: str
+    direccion: Optional[str]
+    nombre_comuna: str
+    nombre_tipo_usuario: str
+    id_almacen: Optional[int]
+    estado: bool

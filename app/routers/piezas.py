@@ -12,58 +12,58 @@ def listar_piezas():
     return piezas.listar_piezas()
 
 @router.post("/piezas")
-def agregar_pieza(data: PiezaCreate):
-    piezas.crear_pieza(data)
+def agregar_pieza(id_usuario: int, data: PiezaCreate):
+    piezas.crear_pieza(id_usuario, data)
     return {"message": "Pieza agregada correctamente"}
 
 @router.put("/piezas/{id_pieza}")
-def actualizar_pieza(id_pieza: int, data: PiezaUpdate):
-    piezas.actualizar_pieza(id_pieza, data)
+def actualizar_pieza(id_usuario: int, id_pieza: int, data: PiezaUpdate):
+    piezas.actualizar_pieza(id_usuario, id_pieza, data)
     return {"message": "Pieza actualizada correctamente"}
 
 @router.delete("/piezas/{id_pieza}")
-def eliminar_pieza(id_pieza: int):
-    piezas.eliminar_pieza(id_pieza)
+def eliminar_pieza(id_usuario: int, id_pieza: int):
+    piezas.eliminar_pieza(id_usuario, id_pieza)
     return {"message": "Pieza eliminada correctamente"}
 
 # === KITS ===
 
 @router.get("/kits", response_model=list[KitOut])
-def listar_kits():
-    return piezas.listar_kits()
+def listar_kits(id_usuario: int):
+    return piezas.listar_kits(id_usuario)
 
 @router.post("/kits")
-def agregar_kit(data: KitCreate):
-    piezas.crear_kit(data)
+def agregar_kit(id_usuario: int, data: KitCreate):
+    piezas.crear_kit(id_usuario, data)
     return {"message": "Kit agregado correctamente"}
 
 @router.put("/kits/{id_kit}")
-def actualizar_kit(id_kit: int, data: KitUpdate):
-    piezas.actualizar_kit(id_kit, data)
+def actualizar_kit(id_usuario: int, id_kit: int, data: KitUpdate):
+    piezas.actualizar_kit(id_usuario, id_kit, data)
     return {"message": "Kit actualizado correctamente"}
 
 @router.delete("/kits/{id_kit}")
-def eliminar_kit(id_kit: int):
-    piezas.eliminar_kit(id_kit)
+def eliminar_kit(id_usuario: int, id_kit: int):
+    piezas.eliminar_kit(id_usuario, id_kit)
     return {"message": "Kit eliminado correctamente"}
 
 # === KIT-PIEZA ===
 
 @router.get("/kit_piezas/{id_kit}", response_model=list[KitPiezaOut])
-def listar_kit_piezas(id_kit: int):
-    return piezas.listar_kit_piezas(id_kit)
+def listar_kit_piezas(id_usuario: int, id_kit: int):
+    return piezas.listar_kit_piezas(id_usuario, id_kit)
 
 @router.post("/kit_piezas")
-def agregar_kit_pieza(data: KitPiezaCreate):
-    piezas.agregar_kit_pieza(data.id_kit, data.id_pieza, data.cantidad)
+def agregar_kit_pieza(id_usuario: int, data: KitPiezaCreate):
+    piezas.agregar_kit_pieza(id_usuario, data.id_kit, data.id_pieza, data.cantidad)
     return {"message": "Pieza agregada al kit correctamente"}
 
 @router.put("/kit_piezas")
-def actualizar_kit_pieza(data: KitPiezaUpdateFull):
-    piezas.actualizar_kit_pieza(data.id_kit, data.id_pieza, data.cantidad)
+def actualizar_kit_pieza(id_usuario: int, data: KitPiezaUpdateFull):
+    piezas.actualizar_kit_pieza(id_usuario, data.id_kit, data.id_pieza, data.cantidad)
     return {"message": "Cantidad actualizada correctamente"}
 
 @router.delete("/kit_piezas")
-def eliminar_kit_pieza(id_kit: int, id_pieza: int):
-    piezas.eliminar_kit_pieza(id_kit, id_pieza)
+def eliminar_kit_pieza(id_usuario: int, id_kit: int, id_pieza: int):
+    piezas.eliminar_kit_pieza(id_usuario, id_kit, id_pieza)
     return {"message": "Pieza eliminada del kit"}

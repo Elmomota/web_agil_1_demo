@@ -3,6 +3,7 @@ from app.db.db_connection import get_connection
 from app.models.usuario import UsuarioCreate
 from app.models.usuario import UsuarioEdit
 from app.models.usuario import Usuario
+from app.models.usuario import UsuarioOutExtendido
 from app.utils.email import enviar_correo
 
 def crear_usuario(usuario: UsuarioCreate):
@@ -119,28 +120,48 @@ def eliminar_usuario(id_usuario: int):
 
 
 
-def listar_usuarios_service() -> list[Usuario]:
+def listar_usuarios_service() -> list[UsuarioOutExtendido]:
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT id_usuario, p_nombre, correo, direccion, id_comuna, id_tipo_usuario, id_almacen, estado
-        FROM usuario
-        WHERE estado = TRUE
-    """)
-    rows = cursor.fetchall()
+    try:
+        cursor.execute("""
+            SELECT 
+                u.id_usuario,
+                CONCAT(u.p_nombre, ' ', IFNULL(u.s_nombre, ''), ' ', u.a_paterno, ' ', IFNULL(u.a_materno, '')) AS nombre,
+                u.correo,
+                u.direccion,
+                c.nombre AS nombre_comuna,
+                tu.nombre AS nombre_tipo_usuario,
+                u.id_almacen,
+                u.estado
+            FROM usuario u
+            JOIN comuna c ON u.id_comuna = c.id_comuna
+            JOIN tipo_usuario tu ON u.id_tipo_usuario = tu.id_tipo_usuario
+            WHERE u.estado = TRUE
+            ORDER BY u.id_usuario ASC
+        """)
+        rows = cursor.fetchall()
 
-    usuarios = [
-        Usuario(
-            id_usuario=row[0],
-            nombre=row[1],
-            correo=row[2],
-            direccion=row[3],
-            id_comuna=row[4],
-            id_tipo_usuario=row[5],
-            id_almacen=row[6],
-            estado=bool(row[7])
-        )
-        for row in rows
-    ]
+        usuarios = [
+            UsuarioOutExtendido(
+                id_usuario=row[0],
+                nombre=row[1].strip(),
+                correo=row[2],
+                direccion=row[3],
+                nombre_comuna=row[4],
+                nombre_tipo_usuario=row[5],
+                id_almacen=row[6],
+                estado=bool(row[7])
+            )
+            for row in rows
+        ]
 
-    return usuarios
+        return usuarios
+    
+    except Exception as e:
+        conn.rollback()
+        raise e
+
+    finally:
+        cursor.close()
+        conn.close()
