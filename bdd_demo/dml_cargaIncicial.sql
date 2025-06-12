@@ -358,12 +358,12 @@ INSERT INTO comuna (id_comuna, nombre, id_region) VALUES (341, 'Cabo de Hornos',
 
 
 
---1: este tiene acceso el bodeguero
---2: este tiene acceso el bodeguero
---3: este tiene acceso el bodeguero
---4: debiese ser si se quita una pieza de un proyecto, debiese validar si es un kit, si es un kit debe eliminarse todas las piezas de eso proyecto con ese kit en especifico
---5: debiese ser cuando un empleado de un proyecto agrege piezas o kits a un proyecto
---6: este tiene acceso el bodeguero
+-- 1: este tiene acceso el bodeguero
+-- 2: este tiene acceso el bodeguero
+-- 3: este tiene acceso el bodeguero
+-- 4: debiese ser si se quita una pieza de un proyecto, debiese validar si es un kit, si es un kit debe eliminarse todas las piezas de eso proyecto con ese kit en especifico
+-- 5: debiese ser cuando un empleado de un proyecto agrege piezas o kits a un proyecto
+-- 6: este tiene acceso el bodeguero
 INSERT INTO tipo_movimiento (id_tipo_movimiento, nombre, descripcion) VALUES
 (1, 'Entrada', 'Ingreso de nuevas unidades al inventario, generalmente por compra o recepción.'), 
 (2, 'Salida', 'Salida manual del inventario, ya sea por consumo, baja o eliminación.'), 

@@ -79,3 +79,25 @@ def enviar_correo_alerta_stock_bajo(destinatario, pieza):
         "Sistema de Inventario - Maestranzas Unidos S.A."
     )
     enviar_correo(destinatario, asunto, cuerpo)
+def enviar_correo_con_adjunto(destinatario: EmailStr, asunto: str, cuerpo: str, adjunto_path: str):
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = asunto
+        msg['From'] = settings.MAIL_USER
+        msg['To'] = destinatario
+        msg.set_content(cuerpo)
+
+        # Adjuntar archivo
+        with open(adjunto_path, 'rb') as f:
+            contenido = f.read()
+            nombre_archivo = adjunto_path.split('/')[-1]
+            msg.add_attachment(contenido, maintype='application', subtype='octet-stream', filename=nombre_archivo)
+
+        with smtplib.SMTP(settings.MAIL_HOST, settings.MAIL_PORT) as server:
+            server.starttls()
+            server.login(settings.MAIL_USER, settings.MAIL_PASS)
+            server.send_message(msg)
+
+    except Exception:
+        print("Error al enviar correo con adjunto:", traceback.format_exc())
+        raise HTTPException(status_code=500, detail="No se pudo enviar el correo con el adjunto")
