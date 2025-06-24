@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Path
 from app.services import bodega
 from app.models.bodega import BodegaCreate, BodegaUpdate
 
-router = APIRouter(prefix="/bodegas", tags=["Bodegas"])
+router = APIRouter(prefix="/bodega", tags=["Bodega"])
 
 @router.get("/listar")
 def listar():
