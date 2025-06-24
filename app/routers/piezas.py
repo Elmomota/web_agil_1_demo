@@ -8,8 +8,8 @@ router = APIRouter(prefix="/gestion_piezas", tags=["Gestion Piezas"])
 # === PIEZAS ===
 
 @router.get("/piezas", response_model=list[PiezaOut])
-def listar_piezas():
-    return piezas.listar_piezas()
+def listar_piezas(id_usuario: int):
+    return piezas.listar_piezas(id_usuario)
 
 @router.post("/piezas")
 def agregar_pieza(id_usuario: int, data: PiezaCreate):

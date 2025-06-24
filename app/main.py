@@ -64,7 +64,6 @@ app.include_router(proyectos.router, prefix= "/api")
 
 
 
-
 if __name__ == "__main__":
     multiprocessing.freeze_support()  # Importante para Windows y PyInstaller
     import uvicorn
