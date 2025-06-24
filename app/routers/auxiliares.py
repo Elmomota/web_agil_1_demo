@@ -2,7 +2,7 @@
 from fastapi import APIRouter
 from app.services import auxiliares
 
-router = APIRouter(prefix="/auxiliares", tags=["auxiliareses"])
+router = APIRouter(prefix="/combobox", tags=["Comboboxes"])
 
 @router.get("/tipos-usuario")
 def get_tipos_usuario():
