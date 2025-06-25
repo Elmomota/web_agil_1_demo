@@ -317,15 +317,6 @@ def listar_kit_piezas(id_usuario: int, id_kit: int):
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
 
-
-        # Validar estado de kit
-    cursor.execute("SELECT estado FROM kit WHERE id_kit = %s", (id_kit,))
-    kit = cursor.fetchone()
-    if not kit:
-        raise HTTPException(status_code=404, detail="Kit no encontrado")
-    if not kit["estado"]:  # ✅ acceso por clave en dict
-        raise HTTPException(status_code=400, detail="Kit inactivo")
-    
     cursor.execute('''
         SELECT kp.*, p.nombre AS nombre_pieza, COALESCE(p.descripcion, '') AS descripcion_pieza
         FROM kit_pieza kp
