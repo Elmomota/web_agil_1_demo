@@ -12,7 +12,9 @@ from app.routers import bodeguero
 from app.routers import movimiento_inventario
 from app.routers import reportes
 from app.routers import proyectos
+from app.routers import auxiliares
 from app.routers import bodega
+
 
 
 from app.services.verificador import verificar_piezas_vencidas, verificar_stock_bajo
@@ -53,10 +55,14 @@ app.include_router(usuario.router)
 app.include_router(piezas.router, prefix= "/api")
 app.include_router(admin_user.router, prefix= "/api")
 app.include_router(bodeguero.router, prefix= "/api")
-app.include_router(bodega.router, prefix="/api")
 app.include_router(movimiento_inventario.router, prefix= "/api")
 app.include_router(reportes.router, prefix= "/api")
 app.include_router(proyectos.router, prefix= "/api")
+app.include_router(auxiliares.router, prefix= "/api")
+app.include_router(bodega.router, prefix= "/api")
+
+
+
 
 
 

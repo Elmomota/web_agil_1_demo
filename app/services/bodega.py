@@ -6,7 +6,21 @@ def listar_bodegas():
     try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM almacen WHERE estado = TRUE")
+        cursor.execute("""
+            SELECT 
+                a.id_almacen,
+                a.nombre,
+                a.direccion,
+                a.id_comuna,
+                c.nombre AS nombre_comuna,
+                r.id_region,
+                r.nombre AS nombre_region,
+                a.estado
+            FROM almacen a
+            JOIN comuna c ON a.id_comuna = c.id_comuna
+            JOIN region r ON c.id_region = r.id_region
+            WHERE a.estado = TRUE
+        """)
         resultados = cursor.fetchall()
         cursor.close()
         conn.close()
