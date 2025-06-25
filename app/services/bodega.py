@@ -19,6 +19,7 @@ def listar_bodegas():
             FROM almacen a
             JOIN comuna c ON a.id_comuna = c.id_comuna
             JOIN region r ON c.id_region = r.id_region
+            ORDER BY a.estado DESC, a.nombre ASC
         """)
         resultados = cursor.fetchall()
         cursor.close()
