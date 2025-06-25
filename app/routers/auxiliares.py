@@ -39,3 +39,8 @@ def get_roles_proyecto():
 @router.get("/almacenes")
 def get_almacenes():
     return auxiliares.obtener_almacenes()
+
+
+@router.get("/piezas")
+def get_piezas():
+    return auxiliares.obtener_piezas_disponibles()

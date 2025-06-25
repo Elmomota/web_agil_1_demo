@@ -43,10 +43,14 @@ def listar_piezas(id_usuario: int):
         p.stock_minimo,
         p.fecha_vencimiento,
         p.alerta_vencimiento,
-        p.estado
+        p.estado,
+        ia.id_almacen,
+        ia.cantidad
         FROM pieza p
         JOIN marca m ON p.id_marca = m.id_marca
         JOIN categoria c ON p.id_categoria = c.id_categoria
+        JOIN inventario_almacen ia ON ia.id_pieza = p.id_pieza
+        ORDER BY 13 DESC, 1
 
     '''
     cursor.execute(query)
@@ -59,7 +63,8 @@ def listar_piezas(id_usuario: int):
                 imagen_base64 = base64.b64encode(imagen_blob).decode("utf-8")
         except Exception as e:
             print("Error al convertir imagen a base64:", e)
-        pieza["imagen_referencial"] = imagen_base64
+        pieza["imagenOut"] = imagen_base64
+        del pieza["imagen_referencial"]
     cursor.close()
     conn.close()
     return piezas
@@ -247,7 +252,7 @@ def listar_kits(id_usuario: int):
     validar_usuario_admin(id_usuario)
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM kit")
+    cursor.execute("SELECT * FROM kit ORDER BY estado DESC, id_kit")
     kits = cursor.fetchall()
     cursor.close()
     conn.close()

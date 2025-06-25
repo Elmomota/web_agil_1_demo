@@ -51,6 +51,8 @@ class PiezaOut(BaseModel):
     fecha_vencimiento: Optional[date]
     alerta_vencimiento: bool
     estado: bool
+    id_almacen: int
+    cantidad: int
 
 
 

@@ -15,12 +15,10 @@ from app.routers import proyectos
 from app.routers import auxiliares
 from app.routers import bodega
 
-
-
 from app.services.verificador import verificar_piezas_vencidas, verificar_stock_bajo
 
 import multiprocessing
-
+"""
 def scheduler():
     while True:
         ahora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -39,6 +37,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+"""
+app = FastAPI()
 
 # CORS
 app.add_middleware(
@@ -60,15 +61,6 @@ app.include_router(reportes.router, prefix= "/api")
 app.include_router(proyectos.router, prefix= "/api")
 app.include_router(auxiliares.router, prefix= "/api")
 app.include_router(bodega.router, prefix= "/api")
-
-
-
-
-
-
-
-
-
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()  # Importante para Windows y PyInstaller

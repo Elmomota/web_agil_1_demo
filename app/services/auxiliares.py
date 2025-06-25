@@ -52,3 +52,6 @@ def obtener_almacenes():
         JOIN region r ON c.id_region = r.id_region
         WHERE a.estado = TRUE
     """)
+
+def obtener_piezas_disponibles():
+    return fetch_all("SELECT id_pieza, nombre FROM pieza WHERE estado = TRUE")
