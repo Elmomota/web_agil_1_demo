@@ -4,7 +4,10 @@ from typing import Optional
 # Este modelo se usa para retornar datos al frontend (sin contraseña)
 class Usuario(BaseModel):
     id_usuario: int
-    nombre: str
+    p_nombre : str
+    s_nombre: Optional[str]
+    a_paterno: str
+    a_materno: Optional[str]
     correo: str
     direccion: Optional[str]
     id_comuna: int
@@ -14,7 +17,10 @@ class Usuario(BaseModel):
 
 # Este modelo se puede usar para registro o creación si lo deseas
 class UsuarioCreate(BaseModel):
-    nombre: str
+    p_nombre : str
+    s_nombre: Optional[str]
+    a_paterno: str
+    a_materno: Optional[str]
     correo: str
     contrasena: str
     direccion: Optional[str]
@@ -25,7 +31,10 @@ class UsuarioCreate(BaseModel):
 # Este modelo se usa para editar un usuario existente
 class UsuarioEdit(BaseModel):
     id_usuario: int
-    nombre: str
+    p_nombre : str
+    s_nombre: Optional[str]
+    a_paterno: str
+    a_materno: Optional[str]
     correo: str
     direccion: Optional[str]
     id_comuna: int
@@ -35,7 +44,10 @@ class UsuarioEdit(BaseModel):
 
 class UsuarioOutExtendido(BaseModel):
     id_usuario: int
-    nombre: str
+    p_nombre : str
+    s_nombre: Optional[str]
+    a_paterno: str
+    a_materno: Optional[str]
     correo: str
     direccion: Optional[str]
     nombre_comuna: str

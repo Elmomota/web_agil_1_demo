@@ -16,12 +16,17 @@ def crear_usuario(usuario: UsuarioCreate):
         if cursor.fetchone():
             raise HTTPException(status_code=400, detail="Correo ya registrado")
 
-        # Insertar usuario
+        # Insertar usuario (CORRECTAMENTE IDENTADO)
         cursor.execute("""
-            INSERT INTO usuario (p_nombre, s_nombre, a_paterno, a_materno, correo, contrasena, direccion, id_comuna, id_tipo_usuario, id_almacen)
-            VALUES (%s, '', '', '', %s, SHA2(%s, 256), %s, %s, %s, %s)
+            INSERT INTO usuario (
+                p_nombre, s_nombre, a_paterno, a_materno, correo, contrasena, direccion,
+                id_comuna, id_tipo_usuario, id_almacen, estado
+            ) VALUES (%s, %s, %s, %s, %s, SHA2(%s, 256), %s, %s, %s, %s, TRUE)
         """, (
-            usuario.nombre,
+            usuario.p_nombre,
+            usuario.s_nombre,
+            usuario.a_paterno,
+            usuario.a_materno,
             usuario.correo,
             usuario.contrasena,
             usuario.direccion,
@@ -29,6 +34,7 @@ def crear_usuario(usuario: UsuarioCreate):
             usuario.id_tipo_usuario,
             usuario.id_almacen
         ))
+
         conn.commit()
 
         # Enviar correo con credenciales
@@ -42,12 +48,13 @@ def crear_usuario(usuario: UsuarioCreate):
 
         enviar_correo(usuario.correo, "Credenciales de acceso", cuerpo)
 
-        return {"message": "Usuario creado y correo enviado correctamente"}
+
+        return {"message": "Usuario creado. Se intentó enviar el correo."}
 
     except HTTPException:
         raise
     except Exception as e:
-        print("Error general al crear usuario:", e)
+        print("Error general al crear usuario:", e)  # ✅ Muestra el error real en consola
         raise HTTPException(status_code=500, detail="Error al crear usuario")
     finally:
         cursor.close()
@@ -66,13 +73,13 @@ def editar_usuario(usuario: UsuarioEdit):
             UPDATE usuario
             SET p_nombre = %s,
                 s_nombre = %s,
-                a_paterno = $s,
+                a_paterno = %s,
                 a_materno = %s,
                 correo = %s,
                 direccion = %s,
                 id_comuna = %s,
                 id_tipo_usuario = %s,
-                id_almacen = %s,
+                id_almacen = %s
             WHERE id_usuario = %s
         """, (
             usuario.p_nombre,
@@ -91,11 +98,13 @@ def editar_usuario(usuario: UsuarioEdit):
         return {"message": "Usuario actualizado correctamente"}
 
     except Exception as e:
+        print("ERROR SQL:", e)
         raise HTTPException(status_code=500, detail="Error al editar usuario")
 
     finally:
         cursor.close()
         conn.close()
+
 
 def eliminar_usuario(id_usuario: int):
     try:
@@ -127,7 +136,10 @@ def listar_usuarios_service() -> list[UsuarioOutExtendido]:
         cursor.execute("""
             SELECT 
                 u.id_usuario,
-                CONCAT(u.p_nombre, ' ', IFNULL(u.s_nombre, ''), ' ', u.a_paterno, ' ', IFNULL(u.a_materno, '')) AS nombre,
+                u.p_nombre,
+                u.s_nombre,
+                u.a_paterno,
+                u.a_materno,
                 u.correo,
                 u.direccion,
                 c.nombre AS nombre_comuna,
@@ -145,23 +157,41 @@ def listar_usuarios_service() -> list[UsuarioOutExtendido]:
         usuarios = [
             UsuarioOutExtendido(
                 id_usuario=row[0],
-                nombre=row[1].strip(),
-                correo=row[2],
-                direccion=row[3],
-                nombre_comuna=row[4],
-                nombre_tipo_usuario=row[5],
-                id_almacen=row[6],
-                estado=bool(row[7])
+                p_nombre=row[1],
+                s_nombre=row[2],
+                a_paterno=row[3],
+                a_materno=row[4],
+                correo=row[5],
+                direccion=row[6],
+                nombre_comuna=row[7],
+                nombre_tipo_usuario=row[8],
+                id_almacen=row[9],
+                estado=bool(row[10])
             )
             for row in rows
         ]
 
         return usuarios
-    
+
     except Exception as e:
         conn.rollback()
         raise e
 
+    finally:
+        cursor.close()
+        conn.close()
+
+def desactivar_usuario(id_usuario: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT id_usuario FROM usuario WHERE id_usuario = %s", (id_usuario,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        cursor.execute("UPDATE usuario SET estado = FALSE WHERE id_usuario = %s", (id_usuario,))
+        conn.commit()
+        return {"message": "Usuario desactivado correctamente"}
     finally:
         cursor.close()
         conn.close()
