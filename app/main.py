@@ -61,16 +61,7 @@ app.include_router(movimiento_inventario.router, prefix= "/api")
 app.include_router(reportes.router, prefix= "/api")
 app.include_router(proyectos.router, prefix= "/api")
 app.include_router(auxiliares.router, prefix= "/api")
-<<<<<<< HEAD
 app.include_router(bodega.router, prefix= "/api")
-=======
-
-
-
-
-
-
->>>>>>> 6e2662f (actualizacionn de admin usuarios)
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()  # Importante para Windows y PyInstaller
