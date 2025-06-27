@@ -5,9 +5,11 @@ from datetime import date, datetime
 class ProyectoCreate(BaseModel):
     nombre: str
     descripcion: Optional[str]
+    fecha_inicio: date
+    fecha_fin: date
     id_estado: int
     id_usuario_responsable: int
-    fecha_fin: Optional[date]
+
 
 
 class ProyectoActualizarEstado(BaseModel):
@@ -63,3 +65,16 @@ class ProyectoResumen(BaseModel):
     fecha_inicio: datetime
     fecha_fin: Optional[datetime] = None
     estado: str
+
+class AsignarUsuarioProyecto(BaseModel):
+    id_usuario: int
+    id_proyecto: int
+    id_rol_proyecto: int
+
+class EliminarUsuarioProyecto(BaseModel):
+    id_usuario: int
+    id_proyecto: int
+class CrearUsuarioProyecto(BaseModel):
+    id_usuario: int
+    id_proyecto: int
+    id_rol_proyecto: int

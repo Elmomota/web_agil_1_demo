@@ -610,4 +610,4 @@ INSERT INTO kit_pieza (id_kit, id_pieza, cantidad) VALUES
 
 INSERT INTO usuario (id_usuario,p_nombre,s_nombre,a_paterno,a_materno,correo,contrasena,direccion,id_comuna,id_tipo_usuario,id_almacen,estado) VALUES
 	 (1,'Vicente',NULL,'Rivera','Alvarez','vice.riveraa@duocuc.cl','admin123','Manqueque 389',330,1,NULL,1),
-	 (2,'Alvaro','Israel','Barrera',NULL,'churrasquito.psn@gmail.com','12345','No tengo casa 32389',170,2,4,1);
+	 (2,'Alvaro','Israel','Barrera',NULL,'al.barreras@duocuc.cl','admin123','No tengo casa 32389',170,2,4,1);

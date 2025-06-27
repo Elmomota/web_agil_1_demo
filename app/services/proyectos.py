@@ -1,5 +1,5 @@
 from app.db.db_connection import get_connection
-from app.models.proyectos import ProyectoCreate, ProyectoActualizarEstado, AsignarUsuarioProyecto, EliminarUsuarioProyecto, AsignarPiezaProyecto, RemoverPiezaProyecto, PiezaAsignada
+from app.models.proyectos import ProyectoCreate, ProyectoActualizarEstado, AsignarUsuarioProyecto, EliminarUsuarioProyecto, AsignarPiezaProyecto, RemoverPiezaProyecto, PiezaAsignada, UsuarioProyectoOut, CrearUsuarioProyecto
 from fastapi import HTTPException
 from datetime import date
 
@@ -50,6 +50,61 @@ def listar_proyectos():
     except Exception as e:
         print("Error al listar proyectos:", e)
         raise HTTPException(status_code=500, detail="Error al consultar proyectos")
+def obtener_proyecto_detalle(id_proyecto: int):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # 1. Datos generales del proyecto
+        cursor.execute("""
+            SELECT 
+                p.id_proyecto, p.nombre, p.descripcion, p.fecha_inicio, p.fecha_fin, 
+                ep.id_estado, ep.nombre AS nombre_estado,
+                u.id_usuario AS id_responsable,
+                CONCAT(u.p_nombre, ' ', u.a_paterno) AS nombre_responsable
+            FROM proyecto p
+            JOIN estado_proyecto ep ON p.id_estado = ep.id_estado
+            JOIN usuario u ON p.id_usuario_responsable = u.id_usuario
+            WHERE p.id_proyecto = %s
+        """, (id_proyecto,))
+        proyecto = cursor.fetchone()
+
+        if not proyecto:
+            raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+
+        # 2. Usuarios asignados
+        cursor.execute("""
+            SELECT u.id_usuario, CONCAT(u.p_nombre, ' ', u.a_paterno) AS nombre
+            FROM usuario_proyecto up
+            JOIN usuario u ON up.id_usuario = u.id_usuario
+            WHERE up.id_proyecto = %s
+        """, (id_proyecto,))
+        proyecto["usuarios"] = cursor.fetchall()
+
+        # 3. Piezas/kits asignados
+        cursor.execute("""
+            SELECT 
+                dpp.id_pieza AS producto_id,
+                COALESCE(p.nombre, k.nombre) AS nombre,
+                CASE 
+                    WHEN dpp.id_kit IS NOT NULL THEN 'kit'
+                    ELSE 'pieza'
+                END AS tipo,
+                dpp.cantidad
+            FROM detalle_pieza_proyecto dpp
+            LEFT JOIN pieza p ON dpp.id_pieza = p.id_pieza
+            LEFT JOIN kit k ON dpp.id_kit = k.id_kit
+            WHERE dpp.id_proyecto = %s
+        """, (id_proyecto,))
+        proyecto["piezas"] = cursor.fetchall()
+
+        conn.close()
+        return proyecto
+
+    except Exception as e:
+        print("Error al obtener detalle del proyecto:", e)
+        raise HTTPException(status_code=500, detail="Error al obtener detalle del proyecto")
+
 
 def obtener_piezas_asignadas(id_proyecto: int):
     try:
@@ -297,3 +352,28 @@ def listar_usuarios_en_proyecto(id_proyecto: int):
         print("Error al listar usuarios de proyecto:", e)
         raise HTTPException(status_code=500, detail="Error interno al consultar usuarios del proyecto")
 
+def crear_usuario_proyecto(data: CrearUsuarioProyecto):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+        INSERT INTO usuario_proyecto (id_usuario, id_proyecto, id_rol_proyecto)
+        VALUES (%s, %s, %s)
+        """
+
+        cursor.execute(query, (
+            data.id_usuario,
+            data.id_proyecto,
+            data.id_rol_proyecto
+        ))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return {"mensaje": "Usuario del proyecto creado correctamente"}
+
+    except Exception as e:
+        print("Error al crear usuario del proyecto:", e)
+        raise HTTPException(status_code=500, detail="Error al crear usuario del proyecto")

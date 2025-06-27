@@ -22,13 +22,15 @@ def crear(data: ProyectoCreate):
 def ver_todos_proyectos():
     return proyectos.listar_proyectos()
 
+@router.get("/{id_proyecto}", response_model=dict)
+def detalle_proyecto(id_proyecto: int):
+    return proyectos.obtener_proyecto_detalle(id_proyecto)
+
+
 @router.put("/estado")
 def cambiar_estado(data: ProyectoActualizarEstado):
     return proyectos.cambiar_estado_proyecto(data)
 
-@router.post("/usuario/asignar")
-def asignar_usuario(data: AsignarUsuarioProyecto):
-    return proyectos.asignar_usuario_a_proyecto(data)
 
 @router.delete("/usuario/remover")
 def remover_usuario(data: EliminarUsuarioProyecto):
@@ -55,10 +57,23 @@ def asignar_pieza(data: AsignarPiezaProyecto):
 def remover_pieza(data: RemoverPiezaProyecto):
     return proyectos.remover_pieza_de_proyecto(data)
 
+@router.post("/usuario/asignar")
+def asignar_usuario(data: AsignarUsuarioProyecto):
+    return proyectos.asignar_usuario_a_proyecto(data)
+
+@router.delete("/usuario/remover")
+def eliminar_usuario(data: EliminarUsuarioProyecto):
+    return proyectos.eliminar_usuario_de_proyecto(data)
+
 @router.put("/usuario/cambiar-rol")
-def cambiar_rol_usuario(id_usuario: int = Query(...), id_proyecto: int = Query(...), id_nuevo_rol: int = Query(...)):
+def cambiar_rol(id_usuario: int, id_proyecto: int, id_nuevo_rol: int):
     return proyectos.cambiar_rol_usuario_en_proyecto(id_usuario, id_proyecto, id_nuevo_rol)
 
-@router.get("/{id_proyecto}/usuarios", response_model=List[UsuarioProyectoOut])
-def usuarios_asignados(id_proyecto: int):
+@router.get("/{id_proyecto}/usuarios")
+def listar_usuarios(id_proyecto: int):
     return proyectos.listar_usuarios_en_proyecto(id_proyecto)
+from app.models.proyectos import CrearUsuarioProyecto
+
+@router.post("/usuario-proyecto/crear")
+def crear_usuario_proyecto(data: CrearUsuarioProyecto):
+    return proyectos.crear_usuario_proyecto(data)
