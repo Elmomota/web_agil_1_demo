@@ -10,16 +10,27 @@ def login_usuario(correo: str, contrasena: str):
     try:
         cursor = conn.cursor(dictionary=True)
 
+        # Verificar si existe el correo
         cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
+        # Intento 1: Validar con SHA2
         cursor.execute("""
-            SELECT id_usuario,id_tipo_usuario 
+            SELECT id_usuario, id_tipo_usuario 
             FROM usuario 
             WHERE correo = %s AND contrasena = SHA2(%s, 256) AND estado = 1
-        """, (correo, contrasena,))
+        """, (correo, contrasena))
         usuario_validado = cursor.fetchone()
+
+        # Intento 2: Validar con contraseña en texto plano
+        if not usuario_validado:
+            cursor.execute("""
+                SELECT id_usuario, id_tipo_usuario 
+                FROM usuario 
+                WHERE correo = %s AND contrasena = %s AND estado = 1
+            """, (correo, contrasena))
+            usuario_validado = cursor.fetchone()
 
         if not usuario_validado:
             raise HTTPException(status_code=401, detail="Credenciales incorrectas")
