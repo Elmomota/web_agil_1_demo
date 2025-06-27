@@ -1,3 +1,4 @@
+#app\main.py
 from threading import Thread
 import time
 from datetime import datetime
@@ -15,6 +16,9 @@ from app.routers import proyectos
 from app.routers import auxiliares
 from app.routers import bodega
 from app.routers import auxiliares
+from app.routers import alertas
+
+
 
 from app.services.verificador import verificar_piezas_vencidas, verificar_stock_bajo
 
@@ -62,6 +66,8 @@ app.include_router(reportes.router, prefix= "/api")
 app.include_router(proyectos.router, prefix= "/api")
 app.include_router(auxiliares.router, prefix= "/api")
 app.include_router(bodega.router, prefix= "/api")
+app.include_router(alertas.router, prefix= "/api")
+
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()  # Importante para Windows y PyInstaller

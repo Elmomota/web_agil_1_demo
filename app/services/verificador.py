@@ -1,3 +1,4 @@
+#app\services\verificador.py
 from datetime import datetime
 from app.db.db_connection import get_connection
 from app.utils.email import notificar_admin_pieza_vencida, notificar_gestores_remocion, enviar_correo_alerta_stock_bajo

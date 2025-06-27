@@ -1,3 +1,4 @@
+#app\routers\movimiento_inventario.py
 from fastapi import APIRouter, Query
 from typing import Optional
 from app.services import movimiento_inventario as service

@@ -1,3 +1,4 @@
+#app\services\movimiento_inventario.py
 from fastapi import HTTPException
 from app.db.db_connection import get_connection as get_db
 

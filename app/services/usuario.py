@@ -29,3 +29,30 @@ def login_usuario(correo: str, contrasena: str):
     finally:
         cursor.close()
         conn.close()
+
+
+def obtener_id_usuario_por_correo(correo: str):
+    db = get_connection()
+    cursor = db.cursor()
+    try:
+        cursor.execute("SELECT id_usuario FROM usuario WHERE correo = %s AND estado = 1", (correo,))
+        row = cursor.fetchone()
+        if row:
+            return {"id_usuario": row[0]}
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    finally:
+        cursor.close()
+        db.close()
+
+def obtener_id_almacen_por_usuario(id_usuario: int):
+    db = get_connection()
+    cursor = db.cursor()
+    try:
+        cursor.execute("SELECT id_almacen FROM usuario WHERE id_usuario = %s AND estado = 1", (id_usuario,))
+        row = cursor.fetchone()
+        if row and row[0]:
+            return {"id_almacen": row[0]}
+        raise HTTPException(status_code=400, detail="Usuario sin almacén asignado")
+    finally:
+        cursor.close()
+        db.close()

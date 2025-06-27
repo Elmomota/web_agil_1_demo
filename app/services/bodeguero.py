@@ -1,3 +1,4 @@
+#app\services\bodeguero.py
 from fastapi import HTTPException
 from app.db.db_connection import get_connection
 from app.models.bodeguero import StockUpdate

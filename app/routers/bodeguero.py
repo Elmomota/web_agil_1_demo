@@ -1,3 +1,4 @@
+#app\routers\bodeguero.py
 from fastapi import APIRouter, Query
 from app.services import bodeguero
 from app.models import bodeguero as schema
