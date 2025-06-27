@@ -1,3 +1,4 @@
+#app\services\alertas.py
 from app.db.db_connection import get_connection
 
 def listar_piezas_vencidas_por_almacen(id_almacen: int):

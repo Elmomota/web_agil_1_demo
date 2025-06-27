@@ -1,3 +1,5 @@
+#app\routers\usuario.py
+
 from fastapi import APIRouter, Form, Query
 from app.services.usuario import login_usuario, obtener_id_usuario_por_correo, obtener_id_almacen_por_usuario
 

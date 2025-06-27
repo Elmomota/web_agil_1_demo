@@ -1,3 +1,4 @@
+#app\services\usuario.py
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from app.db.db_connection import get_connection
@@ -17,7 +18,7 @@ def login_usuario(correo: str, contrasena: str):
 
         # Intento 1: Validar con SHA2
         cursor.execute("""
-            SELECT id_usuario, id_tipo_usuario 
+            SELECT id_usuario, id_tipo_usuario, id_almacen 
             FROM usuario 
             WHERE correo = %s AND contrasena = SHA2(%s, 256) AND estado = 1
         """, (correo, contrasena))
@@ -26,7 +27,7 @@ def login_usuario(correo: str, contrasena: str):
         # Intento 2: Validar con contraseña en texto plano
         if not usuario_validado:
             cursor.execute("""
-                SELECT id_usuario, id_tipo_usuario 
+                SELECT id_usuario, id_tipo_usuario, id_almacen
                 FROM usuario 
                 WHERE correo = %s AND contrasena = %s AND estado = 1
             """, (correo, contrasena))
