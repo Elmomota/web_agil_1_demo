@@ -44,3 +44,12 @@ def get_almacenes():
 @router.get("/piezas")
 def get_piezas():
     return auxiliares.obtener_piezas_disponibles()
+
+
+@router.get("/usuarios")
+def get_usuarios():
+    return auxiliares.obtener_usuarios_activos()
+
+@router.get("/proyectos")
+def get_proyectos():
+    return auxiliares.obtener_proyectos_activos()

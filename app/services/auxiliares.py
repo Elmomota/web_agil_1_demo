@@ -55,3 +55,9 @@ def obtener_almacenes():
 
 def obtener_piezas_disponibles():
     return fetch_all("SELECT id_pieza, nombre FROM pieza WHERE estado = TRUE")
+
+def obtener_usuarios_activos():
+    return fetch_all("SELECT id_usuario, CONCAT(p_nombre, ' ', a_paterno) AS nombre FROM usuario WHERE estado = 1")
+
+def obtener_proyectos_activos():
+    return fetch_all("SELECT id_proyecto, nombre FROM proyecto WHERE estado = 1")
